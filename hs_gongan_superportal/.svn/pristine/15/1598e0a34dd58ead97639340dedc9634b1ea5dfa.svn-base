@@ -1,0 +1,438 @@
+package com.mininglamp.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.dao.IUserDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.User;
+import com.mininglamp.service.IUserService;
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.ExcelUtil;
+import com.mininglamp.util.MD5Util;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.UserRoleVo;
+
+@Service("userService")
+public class UserServiceImpl  implements IUserService{
+	@Resource
+	private IUserDao userDao;
+	public User getUserById(int userId){
+		return this.userDao.getUserById(userId);  
+	}
+	
+	/**
+	 * 添加用户信息
+	 */
+	@Override
+	public Result addUser(HttpServletRequest request) {
+		User user = new User();
+		setAddUser(request,user);
+		String password = MD5Util.MD5Encode("123456");
+		user.setPassword(password);
+		userDao.insert(user);
+		return Result.SUCCESS;
+	}
+	
+	@Override
+	public Result addUsers(MultipartFile excelFile) {
+		ArrayList<ArrayList<String>> list = ExcelUtil.readExcel(excelFile);
+		for (int i = 2; i < list.size(); i++) {
+			insertExcelUser(list.get(i),list.get(0));
+		}
+		return Result.SUCCESS;
+	}
+
+	private void insertExcelUser(ArrayList<String> arrayList, ArrayList<String> columnList) {
+		User user = new User();
+		setAddExcelUser(arrayList,user,columnList);
+		userDao.insert(user);
+	}
+
+	private void setAddExcelUser(ArrayList<String> arrayList, User user, ArrayList<String> columnList) {
+		for (int i = 0; i < columnList.size(); i++) {
+			if("JH".equals(columnList.get(i))){
+				user.setLoginId(arrayList.get(i));
+				user.setJh(arrayList.get(i));
+			}
+			if("JYXM".equals(columnList.get(i))){
+				// jyxm:员姓名:
+				user.setJyxm(arrayList.get(i));
+			}
+			if("XB".equals(columnList.get(i))){
+				// xb:1
+				user.setXb(getXb(arrayList.get(i)));
+			}
+			if("SFZH".equals(columnList.get(i))){
+				// sfzh:身份证号:3
+				String sfzh = arrayList.get(i);
+				user.setSfzh(sfzh);
+				user.setCsrq(sfzh.substring(6,14));
+				user.setJg(sfzh.substring(0, 6));
+			}
+//			if("CSRQ".equals(columnList.get(i))){
+//				// csrq:22/02/2017 4
+//				user.setCsrq(dateFormate(arrayList.get(i)));
+//			}
+			
+//			if("JG".equals(columnList.get(i))){
+//				// jg:1  5
+//				user.setJg(arrayList.get(i));
+//			}
+			if("MZ".equals(columnList.get(i))){
+				// mz:2  6
+				user.setMz(getMz(arrayList.get(i)));
+			}
+			if("ZZMM".equals(columnList.get(i))){
+				// zzmm:2 7
+				user.setZzmm(getZzmm(arrayList.get(i)));
+			}
+			if("GZDWDM".equals(columnList.get(i))){
+				// gzdwdm:1  8
+				user.setGzdwdm(arrayList.get(i));
+			}
+			if("GZDWMC".equals(columnList.get(i))){
+				// gzdwdm:1  8
+				user.setGzdwmc(arrayList.get(i));
+			}
+			if("CJGZSJ".equals(columnList.get(i))){
+				// cjgzsj:22/04/2017  10
+				user.setCjgzsj(dateFormate(arrayList.get(i)));
+			}
+			if("CJGAGZSJ".equals(columnList.get(i))){
+				// cjgagzsj:06/02/2017  11
+				user.setCjgagzsj(dateFormate(arrayList.get(i)));
+			}
+			if("ZWMC".equals(columnList.get(i))){
+				// zwmc:     12
+				user.setZwmc(arrayList.get(i));
+			}
+			if("ZWSM".equals(columnList.get(i))){
+				// zwsm:职务说明  13
+				user.setZwsm(arrayList.get(i));
+			}
+			if("PZRZRQ".equals(columnList.get(i))){
+				// pzrzrq:06/02/2017
+				user.setPzrzrq(dateFormate(arrayList.get(i)));
+			}
+			if("JYYX".equals(columnList.get(i))){
+				// jyyx:2
+				user.setJyyx(getJyyx(arrayList.get(i)));
+			}
+			if("SJXRQ".equals(columnList.get(i))){
+				// sjxrq:13/02/2017
+				user.setSjxrq(dateFormate(arrayList.get(i)));
+			}
+			if("BGSDHHM".equals(columnList.get(i))){
+				// sjxrq:13/02/2017
+				user.setBgsdhhm(dateFormate(arrayList.get(i)));
+			}
+			if("SJHM".equals(columnList.get(i))){
+				// sjhm:2342342
+				user.setSjhm(arrayList.get(i));
+			}
+			if("ISLOCK".equals(columnList.get(i))){
+				// islock:1
+				user.setIsLock(getIsLock(arrayList.get(i)));
+			}
+			if("ENDTIME".equals(columnList.get(i))){
+				// endtime:32
+				user.setEndTime(arrayList.get(i));
+			}
+		}
+		//创建时间
+		user.setCreateTime(getNowString());
+		//更新时间
+		user.setUpdateTime(getNowString());
+		user.setPassword(MD5Util.MD5Encode("123456"));
+		
+	}
+
+	private String getIsLock(String string) {
+		if("是".equals(string)){
+			return "1";
+		}else{
+			return "0" ;
+		}
+	}
+
+	/**
+	 * 警衔
+	 * @param string
+	 * @return
+	 */
+	private String getJyyx(String string) {
+		Map<String, Object> mzMap = (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_JYYX);
+		for (Entry<String, Object> entry : mzMap.entrySet()) {
+			if(string.equals(entry.getValue())){
+				return entry.getKey() ;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 获得政治面貌
+	 * @param string
+	 * @return
+	 */
+	private String getZzmm(String zzmmString) {
+		Map<String, Object> mzMap = (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_ZZMM);
+		for (Entry<String, Object> entry : mzMap.entrySet()) {
+			if(zzmmString.equals(entry.getValue())){
+				return entry.getKey() ;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 获得民族信息
+	 * @param mzString
+	 * @return
+	 */
+	private String getMz(String mzString) {
+		Map<String, Object> mzMap = (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_MZ);
+		for (Entry<String, Object> entry : mzMap.entrySet()) {
+			if(mzString.equals(entry.getValue())){
+				return entry.getKey() ;
+			}
+		}
+		return null;
+	}
+
+	private String getXb(String string) {
+		if("男".equals(string)){
+			return Constants.MAN;
+		}else{
+			return Constants.WOMEN;
+		}
+	}
+
+	/**
+	 * 把requst参数放入user
+	 * @param request
+	 * @param user
+	 */
+	private void setAddUser(HttpServletRequest request, User user) {
+		
+		
+		user.setLoginId(request.getParameter("loginId"));
+		// jh:警号
+		user.setJh(request.getParameter("jh"));
+		// jyxm:员姓名:
+		user.setJyxm(request.getParameter("jyxm"));
+		// xb:1
+		user.setXb(request.getParameter("xb"));
+		// sfzh:身份证号:
+		user.setSfzh(request.getParameter("sfzh"));
+		// csrq:22/02/2017
+		user.setCsrq(dateFormate(request.getParameter("csrq")));
+		// jg:1
+		user.setJg(request.getParameter("jg"));
+		// mz:2
+		user.setMz(request.getParameter("mz"));
+		// zzmm:2
+		user.setZzmm(request.getParameter("zzmm"));
+		// gzdwdm:1
+		String gzdwdm = request.getParameter("gzdwdm");
+		user.setGzdwdm(gzdwdm);
+		user.setGzdwmc((String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_GZDWDM)).get(gzdwdm));
+		
+		// cjgzsj:22/04/2017
+		user.setCjgzsj(dateFormate(request.getParameter("cjgzsj")));
+		// cjgagzsj:06/02/2017
+		user.setCjgagzsj(dateFormate(request.getParameter("cjgagzsj")));
+		// zwmc:7
+		user.setZwmc(request.getParameter("zwmc"));
+		// zwsm:职务说明
+		user.setZwsm(request.getParameter("zwsm"));
+		// pzrzrq:06/02/2017
+		user.setPzrzrq(dateFormate(request.getParameter("pzrzrq")));
+		// jyyx:2
+		user.setJyyx(request.getParameter("jyyx"));
+		// sjxrq:13/02/2017
+		user.setSjxrq(dateFormate(request.getParameter("sjxrq")));
+		// bgsdhhm:2342432
+		user.setBgsdhhm(request.getParameter("bgsdhhm"));
+		// sjhm:2342342
+		user.setSjhm(request.getParameter("sjhm"));
+		// islock:1
+		user.setIsLock(request.getParameter("islock"));
+		// endtime:32
+		user.setEndTime(request.getParameter("endTime"));
+		//创建时间
+		user.setCreateTime(getNowString());
+		//更新时间
+		user.setUpdateTime(getNowString());
+	}
+
+	// 获得现在的时间
+	private String getNowString() {
+		Date currentTime = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
+
+	private String dateFormate(String date) {
+		date = date.replace("/", "");
+		return date;
+	}
+
+	@Override
+	public Result updateUser(HttpServletRequest request) {
+		
+		User user = new User();
+		setUpdateUser(request,user);
+		user.setPassword("1234567890");
+		userDao.updateUser( user);
+		return Result.SUCCESS;
+	}
+
+	private void setUpdateUser(HttpServletRequest request, User user) {
+		user.setUserId(Integer.parseInt(request.getParameter("userId")));
+		user.setLoginId(request.getParameter("loginId"));
+		// jh:警号
+		user.setJh(request.getParameter("jh"));
+		// jyxm:员姓名:
+		user.setJyxm(request.getParameter("jyxm"));
+		// xb:1
+		user.setXb(request.getParameter("xb"));
+		// sfzh:身份证号:
+		user.setSfzh(request.getParameter("sfzh"));
+		// csrq:22/02/2017
+		user.setCsrq(dateFormate(request.getParameter("csrq")));
+		// jg:1
+		user.setJg(request.getParameter("jg"));
+		// mz:2
+		user.setMz(request.getParameter("mz"));
+		// zzmm:2
+		user.setZzmm(request.getParameter("zzmm"));
+		// gzdwdm:1
+		String gzdwdm = request.getParameter("gzdwdm");
+		user.setGzdwdm(gzdwdm);
+		user.setGzdwmc((String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_GZDWDM)).get(gzdwdm));
+		
+		// cjgzsj:22/04/2017
+		user.setCjgzsj(dateFormate(request.getParameter("cjgzsj")));
+		// cjgagzsj:06/02/2017
+		user.setCjgagzsj(dateFormate(request.getParameter("cjgagzsj")));
+		// zwmc:7
+		user.setZwmc(request.getParameter("zwmc"));
+		// zwsm:职务说明
+		user.setZwsm(request.getParameter("zwsm"));
+		// pzrzrq:06/02/2017
+		user.setPzrzrq(dateFormate(request.getParameter("pzrzrq")));
+		// jyyx:2
+		user.setJyyx(request.getParameter("jyyx"));
+		// sjxrq:13/02/2017
+		user.setSjxrq(dateFormate(request.getParameter("sjxrq")));
+		// bgsdhhm:2342432
+		user.setBgsdhhm(request.getParameter("bgsdhhm"));
+		// sjhm:2342342
+		user.setSjhm(request.getParameter("sjhm"));
+		// islock:1
+		user.setIsLock(request.getParameter("islock"));
+		// endtime:32
+		user.setEndTime(request.getParameter("endTime"));
+		//创建时间
+		user.setCreateTime(getNowString());
+		//更新时间
+		user.setUpdateTime(getNowString());
+		
+	}
+
+	/**
+	 * 删除用户
+	 */
+	@Override
+	public Result  deleteUser(Integer userId){
+		userDao.delete( userId);
+		return Result.SUCCESS;
+	}
+
+	
+
+	@Override
+	public PageSupport findPageUsers(PageSupport pageSupport) {
+		decode(pageSupport);
+		pageSupport.formateIn();
+		pageSupport.setItems(getPageUsers(pageSupport));
+		pageSupport.setTotalCount(userDao.findTotalCount(pageSupport));
+		pageSupport.formateOut();
+		return pageSupport;
+	}
+
+	private void decode(PageSupport pageSupport) {
+		try {
+			if(null!=pageSupport.getSearch()&&null != pageSupport.getSearch().get("jyxm")){
+				pageSupport.getSearch().put("jyxm", URLDecoder.decode(pageSupport.getSearch().get("jyxm"), "UTF-8") );
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 获得分页用户信息
+	 * @param pageSupport
+	 * @return
+	 */
+	private List getPageUsers(PageSupport pageSupport) {
+		List<User> users = userDao.findPageUsers(pageSupport);
+		for (User user : users) {
+			user.form();
+		}
+		return users;
+	}
+
+	@Override
+	public User findUser(Integer userId) {
+		User user = userDao.findUser(userId);
+		user.form();
+		return user;
+	}
+
+	@Override
+	public List<UserRoleVo> findUserRoleVos(HttpServletRequest request) {
+		
+		Integer userId =  Integer.parseInt(request.getParameter("userId"));
+		String sysNo = request.getParameter("sysNo");
+		return userDao.findUserRoleVos(sysNo,userId);
+	}
+
+	@Override
+	public Result submitUserRole(HttpServletRequest request) {
+		Integer userId = Integer.parseInt(request.getParameter("userId"));
+		String sysNo = request.getParameter("sysNo");
+		String roleId[] = request.getParameterValues("roleId");
+		//删除用户在指定系统的角色
+		userDao.deleteUserRole(userId,sysNo);
+		if(null != roleId){
+			List<Integer> intRoleIds = new ArrayList<Integer>();
+			for (int i = 0; i < roleId.length; i++) {
+				intRoleIds.add(Integer.parseInt(roleId[i]));
+			}
+			userDao.addUserRole(userId,sysNo,intRoleIds);
+		}
+		return Result.SUCCESS;
+	}
+
+	
+	
+	
+}

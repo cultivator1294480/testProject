@@ -1,0 +1,44 @@
+@charset "utf-8";
+body{ background:url(./images/common/loginbg.jpg) no-repeat; background-size:100%; overflow: hidden;}
+.loginbg{ width:1440px; height:500px; margin:-200px 0 0 -720px; position:absolute; top:50%; left:50%; background:url(./images/common/loginbg2.png) no-repeat; background-size:100% ;}
+.loginicon{ width:120px; height:120px; margin:0 0 0 -60px; position:absolute; top:0; left:50%; background:url(./images/common/loginicon.png) no-repeat;}
+/*---------- 登录页面 ----------*/
+.login_body{position: absolute;top: 0px; left: 0px;bottom: 0px;right: 0px;  background-size: 100% ; filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader ( sizingMethod='crop')";}
+.login_body .center_continer{width: 400px;height: 240px;position: absolute;top: 50%;right: 5%;margin: -80px 0 0;}
+.loginform{ position:relative;}
+.login_body .center_continer .login_content .login_row{margin: 35px 60px ;}
+.login_body .center_continer .login_content .pki_btn span{display: inline-block;margin: 10px 45px}
+.login_body .center_continer .login_content .pki_btn a{color:#666;text-decoration: underline;}
+.login_body .center_continer .login_content .pki_btn a:hover{color:#2c6cb7;}
+.login_body .center_continer .login_content .logo{background: url("images/common/logo.png") center 15px no-repeat;height:56px;}
+.login_body .mask_uname,.login_body .mask_pwd{ width:30px; height:30px; background:url("images/common/user.png") center center no-repeat #fff; position:absolute; top:70px; left:109px;}
+.login_body .mask_pwd{ background-image: url("images/common/pwd.png"); top:115px;}
+.login_row .input_info{padding-left: 40px; border:none;border-bottom: 1px solid #ddd;border-radius: 1px;line-height: 32px;  height: 32px;width: 280px;color: #fff;background-position: 10px center ; background-repeat: no-repeat}
+.login_row .input_user{background-image: url("images/common/user.png");}
+.login_row .input_pwd{background-image: url("images/common/pwd.png");}
+.login_row .input_user:hover{background-image: url("images/common/user_hover.png");}
+.login_row .input_pwd:hover{background-image: url("images/common/pwd_hover.png");}
+.login_row .input_info:hover{border-color:#2a83ff }
+/*.row_btn{height: 32px;border: 1px solid #dfdfdf; border-radius: 2px;background: #fff ;opacity: 1;margin-top: 20px}
+.login_row .login_btn{height: 30px;background:url("images/common/btnbg.png") left no-repeat #2c6cb7;width: 90px;border: 0;border-radius: 2px;text-indent: 30px;color: #fff}*/
+
+.row_btn{height: 32px;opacity: 1;margin-top: 20px}
+.login_row .login_pki_btn,
+.login_row .login_btn{height: 30px;background:#2c6cb7;width: 90px;border: 0;border-radius: 2px;color: #fff}
+.login_row .login_pki_btn{ width:172px;}
+
+.login_row .group_select{height: 30px; color: #888; border: 0;width: 190px;}
+.login_row .group_select:focus{outline: none}
+.login_row .group_select .select2-choice,.group_select .select2-choice .select2-arrow{height: 32px!important; line-height: 32px!important;border: 0!important;background: #fff!important;  box-shadow: none;filter:none!important;}
+ .select2-drop-active{border: 0!important;}
+ .select2-container .select2-choice .select2-arrow b{background: url("images/common/icon-dropdown.png") center no-repeat !important;}
+ .select2-dropdown-open .select2-choice .select2-arrow b{background: url("images/common/icon-dropup.png")center no-repeat!important;}
+.login_row .a_check{width: 70px;height: 14px;display: inline-block;   text-indent: 20px;}
+.login_row .a_check,.login_row .a_check:hover,.login_row .a_check:visited{color: #666; text-decoration: none!important; line-height:16px;}
+.login_row .uncheck{background: url("images/common/uncheck.png") no-repeat;}
+.login_row .checked{background: url("images/common/checked.png") no-repeat;}
+.login_row .errortip{ position:absolute; right:22%; top:73%; color:rgba(217,41,95,0.7); background:url(./images/common/icon-error.png) left center no-repeat; padding-left:26px;}
+.artui-dialog .login_row .errortip{ top:73%;}
+
+.login_content .downloadtip{ margin:-40px 0 0 5px; color:#fd9944; font-size:18px; font-weight: bold; position:absolute; display:none;}
+button{ cursor: pointer;}

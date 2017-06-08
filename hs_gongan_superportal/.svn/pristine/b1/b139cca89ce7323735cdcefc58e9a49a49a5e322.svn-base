@@ -1,0 +1,23 @@
+package com.mininglamp.service;
+
+import java.util.Map;
+
+import com.mininglamp.pojo.Desktopyy;
+
+
+
+public interface IDesktopService {
+
+
+	public Map getSys2Map(int userId);
+
+	public Desktopyy getdesktopid();
+
+	public int updateDesk(String conApp, String leftApp, String column,
+			int userid);
+
+	public int getSelectdesktop(int userid);
+
+	public int addDesk(String clomns,String otherDesktop);
+
+}

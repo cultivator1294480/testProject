@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.IDpetDao">
+	<!-- -->
+
+	<select id="findTotalCount" resultType="int" parameterType="com.mininglamp.util.PageSupport">
+		select count(8) from(
+			select
+			ID,
+			CODE,
+			NAME,
+			REMARK,
+			VERSION
+			from tb_d_gzdwdm where 1=1 
+			<if test=" null !=  search  and null != search.code and '' != search.code ">
+	    		and CODE LIKE CONCAT('%',#{search.code},'%')
+	    	</if>
+	     	<if test=" null !=  search  and null != search.deptName and '' != search.deptName ">
+	    		and NAME LIKE CONCAT('%',#{search.deptName},'%')
+	    	</if>
+		) as countAlias
+	</select>
+
+	<!-- 查询 -->
+	<resultMap id="dept" type="com.mininglamp.pojo.Dept">
+		<id column="id" property="id"></id>
+		<result column="DEPT_NO" property="deptNo"></result>
+		<result column="DEPT_NAME" property="deptName"></result>
+		<result column="PARENT_DEPT_NO" property="parentDeptNo"></result>
+	</resultMap>
+	
+	
+	
+	
+
+
+		<!-- 查询 -->
+	<resultMap id="workUnit" type="com.mininglamp.pojo.WorkUnit">
+		<result column="ID" property="id"></result>
+		<result column="CODE" property="code"></result>
+		<result column="NAME" property="name"></result>
+		<result column="REMARK" property="remark"></result>
+		<result column="VERSION" property="version"></result>
+	</resultMap>
+		
+	<select id="findPageWorkUnits" resultMap="workUnit"
+		parameterType="com.mininglamp.util.PageSupport">
+		select
+		ID,
+		CODE,
+		NAME,
+		REMARK,
+		VERSION
+		from tb_d_gzdwdm where 1=1 
+		<if test=" null !=  search  and null !=  search.code  and '' !=  search.code">
+    		and CODE LIKE CONCAT('%',#{search.code},'%')
+    	</if>
+     	<if test=" null !=  search  and null !=  search.deptName  and '' !=  search.deptName">
+    		and NAME LIKE CONCAT('%',#{search.deptName},'%')
+    	</if>
+    	 order by CODE desc
+		limit #{startLine},#{pageSize}
+	</select>
+
+	<!-- 根据 id查的部门信息-->
+	<select id="findWorkUnit" resultMap="workUnit" parameterType="com.mininglamp.pojo.WorkUnit">
+		select
+		ID,
+		CODE,
+		NAME,
+		REMARK,
+		VERSION
+		from tb_d_gzdwdm
+		where ID =#{id} 
+	</select>
+
+
+	<update id="updateWorkUnit" parameterType="com.mininglamp.pojo.WorkUnit">
+		UPDATE tb_d_gzdwdm
+		SET
+			CODE = #{code},
+			NAME = #{name},
+			REMARK = #{remark},
+			VERSION = #{version}
+		where id =#{id} 
+	</update>
+
+
+	<!-- 插入一条部门信息 -->
+	<insert id="saveWorkUnit" parameterType="com.mininglamp.pojo.WorkUnit">
+	INSERT INTO tb_d_gzdwdm
+	(
+	CODE,
+	NAME,
+	REMARK,
+	VERSION
+	)
+	VALUES
+	(
+	#{code},
+	#{name},
+	#{remark},
+	#{version}
+	);
+	</insert>
+
+
+
+
+
+	
+
+
+
+	<!-- 删除部门信息 -->
+	<delete id="deleteWorkUnit" parameterType="com.mininglamp.pojo.WorkUnit">
+		delete from tb_d_gzdwdm where id = #{id}
+	</delete>
+
+</mapper>

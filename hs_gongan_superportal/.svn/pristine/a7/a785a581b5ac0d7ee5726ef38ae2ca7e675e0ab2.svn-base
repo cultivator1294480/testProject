@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.ILoginDao">
+    <resultMap id="user" type="com.mininglamp.pojo.UserLogin">
+        <id column="USERID" property="userid"></id>
+        <result column="LOGINID" property="loginid"></result>
+        <result column="PASSWORD" property="password"></result>
+        <result column="JH" property="jh"></result>
+        <result column="JYXM" property="jyxm"></result>
+        <result column="XB" property="xb"></result>
+        <result column="SFZH" property="sfzh"></result>
+        <result column="CSRQ" property="csrq"></result>
+        <result column="JG" property="jg"></result>
+        <result column="MZ" property="mz"></result>
+        <result column="ZZMM" property="zzmm"></result>
+        <result column="GZDWMC" property="gzdwmc"></result>
+        <result column="GZDWDM" property="gzdwdw"></result>
+        <result column="CJGZSJ" property="cjgzsj"></result>
+        <result column="CJGAGZSJ" property="cjgasjsj"></result>
+        <result column="ZWMC" property="zwmc"></result>
+        <result column="ZWSM" property="zwsm"></result>
+        <result column="PZRZRQ" property="pzrzrq"></result> 
+        <result column="JYYX" property="jyyx"></result>
+        <result column="SJXRQ" property="sjxrq"></result>
+        <result column="BGSDHHM" property="gbsdhhm"></result>
+        <result column="SJHM" property="sjhm"></result>
+        <result column="CREATETIME" property="createtime"></result>
+        <result column="UPDATETIME" property="updatetime"></result>
+        <result column="ISLOCK" property="islock"></result>
+        <result column="ENDTIME" property="endtime"></result>
+        <result column="COMMENTS" property="comments"></result>
+        <result column="REMARKS" property="remarks"></result>
+    </resultMap>
+    
+    
+    <select id="getLogin" resultMap="user">
+ 		select  *  from tb_sys_user where LOGINID=#{loginid} and PASSWORD=#{password}
+    </select>
+    
+     <resultMap id="userJson" type="com.mininglamp.pojo.DeskJson">
+        <result column="DOCK" property="dock"></result>
+        <result column="DESKTOP1" property="desktop1"></result>
+        <result column="DESKTOP2" property="desktop2"></result>
+        <result column="DESKTOP3" property="desktop3"></result>
+        <result column="DESKTOP4" property="desktop4"></result>
+        <result column="DESKTOP5" property="desktop5"></result>
+        <result column="DESKTOP6" property="desktop6"></result>
+        <result column="DESKTOP7" property="desktop7"></result>
+        <result column="DESKTOP8" property="desktop8"></result>
+    </resultMap>
+   <!--  (case when f.DOCK is null  then '{"DOCK":[]}' else f.DOCK end )as DOCK, -->
+   
+     <select id="getUserId" resultMap="userJson">
+		select  DISTINCT
+		f.DOCK AS DOCK,f.DESKTOP1 AS DESKTOP1,f.DESKTOP2 as DESKTOP2,
+ 		f.DESKTOP3 as DESKTOP3,f.DESKTOP4 as DESKTOP4,f.DESKTOP5 as DESKTOP5,f.DESKTOP6 as DESKTOP6,f.DESKTOP7 as DESKTOP7,f.DESKTOP8 as DESKTOP8
+ 		from tb_sys_user a left join tb_m_yhzmyyb f on a.USERID=f.USERID where a.USERID=#{userid}
+    </select>
+     <select id="getPrivById" resultType="String">
+    	SELECT 
+			 DISTINCT
+			tb_sys_privilege.PRIVCOMM 
+		FROM 
+  			TB_SYS_USER  			
+		LEFT JOIN tb_sys_map_user_role ON TB_SYS_USER.USERID=tb_sys_map_user_role.USERID
+		LEFT JOIN tb_sys_role ON tb_sys_map_user_role.ROLEID=tb_sys_role.ROLEID
+		LEFT JOIN tb_sys_map_role_priv ON tb_sys_role.ROLEID=tb_sys_map_role_priv.ROLEID
+		LEFT JOIN tb_sys_privilege ON tb_sys_map_role_priv.PRIVID=tb_sys_privilege.PRIVID
+		WHERE 
+			TB_SYS_USER.LOGINID=#{loginid} 
+    </select>
+</mapper>

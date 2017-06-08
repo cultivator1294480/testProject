@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.DesktopDao">
+    <resultMap id="desktop" type="com.mininglamp.pojo.Desktopyy">
+    	<result column="DOCK" property="dock"></result>
+        <result column="DESKTOP1" property="desktop1"></result>
+        <result column="DESKTOP2" property="desktop2"></result>
+        <result column="DESKTOP3" property="desktop3"></result>
+        <result column="DESKTOP4" property="desktop4"></result>
+        <result column="DESKTOP5" property="desktop5"></result>
+        <result column="DESKTOP6" property="desktop6"></result>
+        <result column="DESKTOP7" property="desktop7"></result>
+        <result column="DESKTOP8" property="desktop8"></result>
+    </resultMap>
+    
+    <select id="getdesktopid" resultMap="desktop">
+    	select 
+    		b.DOCK AS DOCK,b.DESKTOP1 AS DESKTOP1,b.DESKTOP2 as DESKTOP2,
+    	    b.DESKTOP3 as DESKTOP3,b.DESKTOP4 as DESKTOP4,b.DESKTOP5 as DESKTOP5,b.DESKTOP6 as DESKTOP6,b.DESKTOP7 as DESKTOP7,b.DESKTOP8 as DESKTOP8
+    	FROM 
+		tb_m_yhzmyyb b
+    </select>
+    
+    <select id="getSelectdesktop" resultType="int">
+    	select count(*) from tb_m_yhzmyyb where USERID=#{userid}
+    </select>
+
+	<update id="updateDesk" parameterType="java.lang.String">
+		update TB_M_YHZMYYB set DOCK=#{leftApp},${column}=#{conApp}
+    	 where USERID=#{userid}  
+	</update>
+
+	
+	<insert id="addDesk" parameterType="java.lang.String">
+		insert into TB_M_YHZMYYB
+		(${clomns}) values (${otherDesktop})
+	</insert>
+	
+</mapper>

@@ -1,0 +1,73 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.Dept;
+import com.mininglamp.pojo.WorkUnit;
+import com.mininglamp.util.PageSupport;
+
+@MapperScan
+public interface IDpetDao{
+
+
+
+	public String countDepts();
+
+	public Integer  findCountDept(Dept dept);
+
+	/**
+	 * 保存工作单位信息
+	 * @param workUnit
+	 * @return
+	 */
+	public Integer saveWorkUnit(WorkUnit workUnit);
+
+	/**
+	 * 查询其他有相同名字的部门信息
+	 * @param dept
+	 * @return
+	 */
+	public Integer findOtherCountDept(Dept dept);
+
+	public void updateDept(Dept dept);
+
+	public List<WorkUnit> findPageWorkUnits(@Param("pageSupport")PageSupport pageSupport,@Param("code")String code,@Param("deptName")String deptName);
+
+	
+	public Integer findTotalCount(@Param("code")String code,@Param("deptName")String deptName);
+
+
+	/**
+	 * 查询工作单位信息
+	 * @param workUnit
+	 * @return
+	 */
+	public WorkUnit findWorkUnit(WorkUnit workUnit);
+
+	/**
+	 * 更新工作单位信息
+	 * @param workUnit
+	 */
+	public void updateWorkUnit(WorkUnit workUnit);
+
+	/**
+	 * 删除
+	 * @param workUnit
+	 */
+	public void deleteWorkUnit(WorkUnit workUnit);
+
+	/**
+	 * 
+	 * @param pageSupport
+	 * @return
+	 */
+	public List<Object> findPageWorkUnits(PageSupport pageSupport);
+
+	public Integer findTotalCount(PageSupport pageSupport);
+
+
+	
+}

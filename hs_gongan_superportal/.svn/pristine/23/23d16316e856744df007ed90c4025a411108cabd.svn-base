@@ -1,0 +1,141 @@
+body {
+	margin-left: 3px;
+	margin-top: 0px;
+	margin-right: 3px;
+	margin-bottom: 0px;
+}
+.STYLE1 {
+	color: #e1e2e3;
+	font-size: 12px;
+}
+.STYLE6 {color: #000000; font-size: 12; }
+.STYLE10 {color: #000000; font-size: 12px; }
+.STYLE19 {
+	color: #344b50;
+	font-size: 12px;
+}
+.STYLE21 {
+	font-size: 12px;
+	color: #3b6375;
+}
+.STYLE22 {
+	font-size: 12px;
+	color: #295568;
+}
+
+
+
+
+.pagination-centered {
+  text-align: right;
+}
+
+.pagination-right {
+  text-align: right;
+}
+
+
+.paginations {
+  height: 20px;
+  /* margin: 18px 0; */
+  float:right;
+}
+
+.paginations ul {
+  display: inline-block;
+  *display: inline;
+  margin-bottom: 0;
+  margin-left: 0;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  *zoom: 1;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+          font-size:14px;
+}
+
+.paginations li {
+  display: inline;
+}
+
+.paginations a {
+  float: left;
+  padding: 0 8px;
+ /*  line-height: 34px; */
+  line-height: 20px;
+  text-decoration:none;
+  border: 1px solid #ddd;
+  border-left-width: 0;
+}
+
+.paginations a:hover,
+.paginations .active a {
+  background-color:#ADD8E6;
+  text-decoration:none;
+  cursor:pointer;
+ 
+}
+
+.paginations .active .a {
+	cursor: not-allowed;
+}
+
+
+.beforeSome:link{
+		color:#000;}
+	.beforeSome:visited{
+		color:red;}
+	.beforeSome:hover{
+		color:#ff6215;}
+	.beforeSome:active{
+		color:yellow;}
+
+.nextSome:link{
+		color:#000;}
+	.nextSome:visited{
+		color:red;}
+	.nextSome:hover{
+		color:#ff6215;}
+	.nextSome:active{
+		color:yellow;}	
+
+.pagination .active a {
+  color: #999999;
+  cursor: default;
+}
+
+.paginations .disabled span,
+.paginations .disabled a,
+.paginations .disabled a:hover {
+  color: #999999;
+  cursor: default;
+  background-color: transparent;
+}
+
+.paginations li:first-child a {
+  border-left-width: 1px;
+  -webkit-border-radius: 3px 0 0 3px;
+     -moz-border-radius: 3px 0 0 3px;
+          border-radius: 3px 0 0 3px;
+}
+
+.paginations li:last-child a {
+  -webkit-border-radius: 0 3px 3px 0;
+     -moz-border-radius: 0 3px 3px 0;
+          border-radius: 0 3px 3px 0;
+}
+
+
+/* 
+ td{
+		word-break:break-all; word-wrap:break-word;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+
+
+ */
+

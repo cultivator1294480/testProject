@@ -1,0 +1,53 @@
+package com.mininglamp.vo;
+
+/**
+ * 用户在指定系统 的角色信息
+ * @author 程城cheng
+ *
+ */
+public class UserRoleVo {
+	
+	private Integer userId;
+	
+	private String sysNo;
+	
+	private Integer roleId;
+	
+	private String roleName;
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getSysNo() {
+		return sysNo;
+	}
+
+	public void setSysNo(String sysNo) {
+		this.sysNo = sysNo;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+	
+
+	
+	
+}

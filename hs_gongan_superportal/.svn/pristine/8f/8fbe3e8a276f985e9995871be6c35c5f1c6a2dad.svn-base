@@ -1,0 +1,21 @@
+package com.mininglamp.util;
+
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
+public class SysOutUtil{
+	
+	public static void sysoRequest(HttpServletRequest request) {
+		Enumeration em = request.getParameterNames();
+		while (em.hasMoreElements()) {
+			String name = (String) em.nextElement();
+			String value = request.getParameter(name);
+			System.out.println(name + ":" + value);
+		}
+
+	}
+}  
+
+ 
+

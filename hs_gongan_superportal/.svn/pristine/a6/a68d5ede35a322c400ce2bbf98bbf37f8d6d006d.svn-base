@@ -1,0 +1,155 @@
+package com.mininglamp.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.dao.IRoleDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Role;
+import com.mininglamp.pojo.User;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.IRoleService;
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.DateUtilPer;
+import com.mininglamp.util.ExcelUtil;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.RolePrivilegeVo;
+
+/**
+ * 角色权限
+ * @author 程城cheng
+ *
+ */
+@Service("roleService")
+public class RoleServiceImp  implements IRoleService{
+	@Resource
+	private IRoleDao roleDao;
+	/**
+	 * 添加角色
+	 */
+	@Override
+	public Result addRole(Role role) {
+		roleDao.saveRole(role);
+		return Result.SUCCESS;
+	}
+
+	@Override
+	public PageSupport findPageRoles(PageSupport pageSupport) {
+		decode(pageSupport);
+		pageSupport.formateIn();
+		pageSupport.setItems(roleDao.findPageRoles(pageSupport));
+		pageSupport.setTotalCount(roleDao.findTotalCount(pageSupport));
+		pageSupport.formateOut();
+		return pageSupport;
+	}
+
+	private void decode(PageSupport pageSupport) {
+		try {
+			if(null!=pageSupport.getSearch()&&null != pageSupport.getSearch().get("roleName")){
+				pageSupport.getSearch().put("roleName", URLDecoder.decode(pageSupport.getSearch().get("roleName"), "UTF-8") );
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	@Override
+	public Result updateRole(Role role) {
+		roleDao.updateRole(role);
+		return Result.SUCCESS;
+	}
+
+	@Override
+	public Result deleteRole(Role role) {
+		roleDao.deleteRole(role);
+		return Result.SUCCESS;
+	}
+
+	@Override
+	public Role findRoleById(Role role) {
+		Role roleReturn = roleDao.findRoleById(role);
+		return roleReturn;
+	}
+
+	@Override
+	public List<RolePrivilegeVo> findRolePrivilegeVo(HttpServletRequest request) {
+		Integer roleId = Integer.parseInt(request.getParameter("roleId"));
+		List<RolePrivilegeVo> rolePrivilegeVos = roleDao.findRolePrivilegeVo(roleId);
+		return rolePrivilegeVos;
+	}
+
+	@Override
+	public Result submitRolePrivilegeVo(HttpServletRequest request){
+		Integer roleId = Integer.parseInt(request.getParameter("roleId"));
+		String sysNo = request.getParameter("sysNo");
+		String privId[] = request.getParameterValues("privId");
+		//删除角色在指定系统的角色
+		roleDao.deleteRolePrivileg(roleId,sysNo);
+		if(null != privId){
+			for (int i = 0; i < privId.length; i++) {
+				roleDao.addRolePrivilege(roleId,sysNo,Integer.parseInt(privId[i]));
+			}
+		}
+		return Result.SUCCESS;
+	}
+
+	@Override
+	public void addRoles(MultipartFile excelFile, HttpServletRequest request){
+		UserLogin user= (UserLogin) request.getSession().getAttribute("user");
+		ArrayList<ArrayList<String>> list = ExcelUtil.readExcel(excelFile);
+		for (int i = 2; i < list.size(); i++) {
+			insertExcelRoles(list.get(i),list.get(0),user);
+		}
+	}
+
+	private void insertExcelRoles(ArrayList<String> arrayList, ArrayList<String> columnList, UserLogin user) {
+		Role role = new Role();
+		setAddExcelUser(arrayList,role,columnList,user);
+		roleDao.saveRole(role);
+	}
+
+	private void setAddExcelUser(ArrayList<String> arrayList, Role role, ArrayList<String> columnList, UserLogin user) {
+		for (int i = 0; i < columnList.size(); i++) {
+			if("ROLENAME".equals(columnList.get(i))){
+				role.setRoleName(arrayList.get(i));
+			}
+			if("ROLECOMM".equals(columnList.get(i))){
+				role.setRoleComm(arrayList.get(i));
+			}
+			if("SYSNO".equals(columnList.get(i))){
+				role.setSysNo(getSysNo(arrayList.get(i)));
+			}
+		}
+		role.setCreateTime(DateUtilPer.getNowString());
+		role.setCreateUser(user.getJyxm());
+		role.setCreateUseridCard(user.getSfzh());
+	}
+
+	private String getSysNo(String string) {
+		Map<String, Object> mzMap = (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_SYS_SYSTEM);
+		for (Entry<String, Object> entry : mzMap.entrySet()) {
+			if(string.equals(entry.getValue())){
+				return entry.getKey() ;
+			}
+		}
+		return null;
+	}
+
+
+
+
+	
+
+}

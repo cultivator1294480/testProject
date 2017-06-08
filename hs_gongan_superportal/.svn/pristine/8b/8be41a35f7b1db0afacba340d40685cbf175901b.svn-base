@@ -1,0 +1,131 @@
+package com.mininglamp.session;
+
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.mininglamp.pojo.UserLogin;
+
+
+public class SessionInterceptor implements HandlerInterceptor{
+
+	
+	public void afterCompletion(HttpServletRequest arg0,
+			HttpServletResponse arg1, Object arg2, Exception arg3)
+			throws Exception {
+		/*String uri = arg0.getRequestURI();
+		String ip = arg0.getRemoteAddr();
+		HttpSession session = arg0.getSession();
+		UserInfo userInfo = (UserInfo) session.getAttribute("userinfo");
+		//记录日志
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+		LogUserOpe logUserOpe = new LogUserOpe();
+		logUserOpe.setIdcard(userInfo.getIdcard());
+		logUserOpe.setOperationtime(sdf.format(new Date()));
+		logUserOpe.setOrgname(userInfo.getOrgname());
+		logUserOpe.setOrgno(userInfo.getOrgno());
+		logUserOpe.setSysno(userInfo.getSysno());
+		logUserOpe.setUsername(userInfo.getUsername());
+		logUserOpe.setOperation(splitVla(LogUtils.sql.toString(),LogUtils.parameters.toString()));
+//		logUserOpeMapper.insert(logUserOpe);
+		
+		OperateLog operateLog = new OperateLog();
+//		operateLog.setErrorCode();
+		operateLog.setOperateCondition(splitVla(LogUtils.sql.toString(),LogUtils.parameters.toString()));
+		operateLog.setOperateName(""); //这个要想办法加上
+		operateLog.setOperateResult("1");
+		operateLog.setOperateTime(sdf.format(new Date()));
+		operateLog.setOperateType((long)1);  //这个要想办法加上
+		operateLog.setOrganization(userInfo.getOrgname());
+		operateLog.setOrganizationId(userInfo.getOrgno());
+//		operateLog.setSqlCondition("");
+		operateLog.setSysno(CommonName.sysno);
+		operateLog.setTerminalId(ip); 
+		operateLog.setUserId(userInfo.getUserid());
+		operateLog.setUserName(userInfo.getUsername());
+		String regId = userInfo.getOrgno().substring(0, 6) + CommonName.sysno;
+		operateLog.setRegId(regId);
+		operateLog.setNumId(SeqLogUtil.producerJlbsSeq(regId)); 
+		
+		operateLogMapper.insert(operateLog);*/
+	}
+
+	@Override
+	public void postHandle(HttpServletRequest arg0, HttpServletResponse arg1,
+			Object arg2, ModelAndView arg3) throws Exception {
+		
+	}
+/**
+ * 拦截url，并且记录日志,更新memcached值
+ */
+	@Override
+	public boolean preHandle(HttpServletRequest arg0, HttpServletResponse arg1,
+			Object arg2) throws Exception {
+		String uri = arg0.getRequestURI();
+		String ip = arg0.getRemoteAddr();
+		HttpSession session = arg0.getSession();
+		UserLogin userInfo = (UserLogin) session.getAttribute("user");
+		if(userInfo==null){ //session失效
+			arg1.sendRedirect(arg0.getContextPath()+"/assets/tologin");
+			return false;
+		}
+		return true;
+	}
+	/**
+	 * 把多个空格替换成一个空格，把换行\n去掉
+	 * @return
+	 *
+	 */
+	private String splitVla(String sql,String parameters){
+		StringBuffer filters = new StringBuffer();
+		//将换行去掉
+		sql = sql.replaceAll("\n", "");
+		String regEx="[' ']+"; //一个或多个空格
+
+    	Pattern p = Pattern.compile(regEx);
+    	Matcher m = p.matcher(sql);
+    	sql = m.replaceAll(" ");//替換為一個空格
+    	
+    	//参数
+    	String[] parameterArray = parameters.replace(",,", ", ,").split(",");
+    	int temp = 0 ;
+    	//将？替换成参数
+    	if(parameterArray!=null&&parameterArray.length>0){
+           int index = sql.indexOf("?");
+    			while(index!=-1){
+    				if(parameterArray.length>temp){
+    					sql = sql.replaceFirst("\\?", parameterArray[temp].equals(" ")?"":parameterArray[temp]);
+    					index = sql.indexOf("?");
+    				}
+    				temp = temp + 1 ;
+    			}
+    	}
+       //截取where 后面的语句
+    	String[] sqlArray = sql.split("/");
+    	if(sqlArray!=null&&sqlArray.length>0){
+    		for(int i = 0 ; i < sqlArray.length ; i ++){
+    			String sqltemp = sqlArray[i] ;
+    			int index = sqltemp.indexOf("where");
+    			if(sqltemp.contains("1=1 and")){
+    				index = index + 5 + 8 ;
+    			}else if(sqltemp.contains("1=1")){
+    				index = index + 5 + 4 ;
+    			}else{
+    				if(index!=-1){
+    					index = index + 5;
+    				}
+    			}
+    			if(index!=-1)
+    			  filters.append(sqltemp.substring(index)+",<br>");
+    		}
+    	}
+		return filters.toString();
+	}
+}

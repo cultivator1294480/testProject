@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.ICodeDao">
+
+
+
+	
+	
+	<!-- 查询 -->
+	<resultMap id="code" type="com.mininglamp.pojo.Code">
+		<result column="CODE" property="key"></result>
+		<result column="NAME" property="value"></result>
+	</resultMap>
+	<select id="getDic" resultMap="code"   parameterType="java.util.Map">  
+	   	SELECT CODE,NAME
+			FROM ${tableName}
+	</select>  
+
+	<select id="getSystem" resultMap="code"   parameterType="java.util.Map">  
+	   	SELECT SYSNO as CODE,
+	   	SYSNAME as NAME
+			FROM ${tableName}
+	</select>  
+
+</mapper>

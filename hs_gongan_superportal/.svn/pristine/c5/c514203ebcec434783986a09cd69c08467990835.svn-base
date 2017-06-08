@@ -1,0 +1,22 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.util.PageSupport;
+@MapperScan
+public interface SystemDao {
+
+	public List getAllsystems(int userId);
+	public List<Systemno> getSystem(PageSupport pageSupport);
+	public Integer findTotalCount(PageSupport pageSupport);
+	public void registSystem(Systemno systemno);
+	public void updateSystem(Systemno sys);
+	public Systemno getfindSysById(Systemno sys);
+	public void getDeleteSystem(Systemno sys);
+
+}

@@ -1,0 +1,63 @@
+package com.mininglamp.service.impl;
+
+import java.util.List;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.mininglamp.dao.ILoginDao;
+import com.mininglamp.pojo.DeskJson;
+import com.mininglamp.pojo.DeskTopApp;
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.ILogService;
+@Service("loginService")
+public class LoginServiceImpl implements ILogService {
+
+	@Resource
+	private ILoginDao loginDao;
+	
+	public UserLogin getLogin(String loginid, String password) {
+		return this.loginDao.getLogin(loginid,password);
+	}
+
+	public DeskJson getUserId(int userid) {
+		return this.loginDao.getUserId(userid);
+	}
+
+	public DeskTopApp getApp(int userid) {
+		return this.loginDao.getApp(userid);
+	}
+
+	public Desktopyy getDesktopyy(int userid) {
+		return this.loginDao.getDesktopyy(userid);
+	}
+
+
+	public List<String> getPrivById(String loginid) {
+		 List<String> ll = this.loginDao.getPrivById(loginid);
+			return ll;
+	}
+
+//	public List<UserSysno>  getAppRole(int userid) {
+//		return loginDao.getAppRole(userid);
+//	}
+	
+	
+	
+	//=======================================================
+	
+	
+	
+//	public Map<String, Systemno>  getAppRole(int userid) {
+//		Map sysMap = new HashMap();
+//		List<UserSysno> myList = loginDao.getAppRole(userid);
+//		for (UserSysno systemno : myList) {
+//			sysMap.put(systemno.getSysno(), systemno);
+//		}
+//		return sysMap;
+//	}
+
+
+}

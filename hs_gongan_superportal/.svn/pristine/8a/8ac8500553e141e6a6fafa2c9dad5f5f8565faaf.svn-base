@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.ExcelUtilDao">
+
+	<!-- 插入一条excel信息 -->
+	<insert id="saveExcel" parameterType="java.util.Map"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO ${tableName}
+		<foreach collection="columns" item="column" index="index" open="("
+			close=")" separator=",">
+			${column}
+		</foreach>
+		VALUES
+		<foreach collection="values" item="value" index="index" open="("
+			close=")" separator=",">
+			#{value}
+		</foreach>;
+	</insert>
+
+
+
+
+</mapper>

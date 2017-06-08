@@ -1,0 +1,74 @@
+package com.mininglamp.vo;
+
+/**
+ * 角色在所在系统 权限信息
+ * @author 程城cheng
+ *
+ */
+public class RolePrivilegeVo {
+	
+	
+	private String sysNo;
+	
+	private Integer roleId;
+	
+
+	
+	private Integer privId;
+	
+
+
+	private String privName;
+	
+	private String privComm;
+	
+	
+	
+	
+
+	public String getPrivComm() {
+		return privComm;
+	}
+
+	public void setPrivComm(String privComm) {
+		this.privComm = privComm;
+	}
+
+	public String getSysNo() {
+		return sysNo;
+	}
+
+	public void setSysNo(String sysNo) {
+		this.sysNo = sysNo;
+	}
+
+	
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	public Integer getPrivId() {
+		return privId;
+	}
+
+	public void setPrivId(Integer privId) {
+		this.privId = privId;
+	}
+
+	public String getPrivName() {
+		return privName;
+	}
+
+	public void setPrivName(String privName) {
+		this.privName = privName;
+	}
+
+	
+	
+	
+}

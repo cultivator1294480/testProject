@@ -1,0 +1,75 @@
+package com.mininglamp.pojo;
+
+public class DeskJson {
+
+
+	private String dock;
+	private String desktop1;
+	private String desktop2;
+	private String desktop3;
+	private String desktop4;
+	private String desktop5;
+	private String desktop6;
+	private String desktop7;
+	private String desktop8;
+	
+	
+
+	
+	public String getDock() {
+		return dock;
+	}
+	public void setDock(String dock) {
+		this.dock = dock;
+	}
+	public String getDesktop1() {
+		return desktop1;
+	}
+	public void setDesktop1(String desktop1) {
+		this.desktop1 = desktop1;
+	}
+	public String getDesktop2() {
+		return desktop2;
+	}
+	public void setDesktop2(String desktop2) {
+		this.desktop2 = desktop2;
+	}
+	public String getDesktop3() {
+		return desktop3;
+	}
+	public void setDesktop3(String desktop3) {
+		this.desktop3 = desktop3;
+	}
+	public String getDesktop4() {
+		return desktop4;
+	}
+	public void setDesktop4(String desktop4) {
+		this.desktop4 = desktop4;
+	}
+	public String getDesktop5() {
+		return desktop5;
+	}
+	public void setDesktop5(String desktop5) {
+		this.desktop5 = desktop5;
+	}
+	public String getDesktop6() {
+		return desktop6;
+	}
+	public void setDesktop6(String desktop6) {
+		this.desktop6 = desktop6;
+	}
+	public String getDesktop7() {
+		return desktop7;
+	}
+	public void setDesktop7(String desktop7) {
+		this.desktop7 = desktop7;
+	}
+	public String getDesktop8() {
+		return desktop8;
+	}
+	public void setDesktop8(String desktop8) {
+		this.desktop8 = desktop8;
+	}
+	
+	
+}

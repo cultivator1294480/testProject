@@ -1,0 +1,19 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.Code;
+
+@MapperScan
+public interface ICodeDao{
+
+	public List<Code> getDic(Map<String, String> table);
+
+	public List<Code> getSystem(Map<String, String> table);
+
+
+	
+}

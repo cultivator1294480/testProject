@@ -1,0 +1,17 @@
+package com.mininglamp.util;
+
+public class Constants {
+	public static final String TB_D_GZDWDM="tb_d_gzdwdm";
+	public static final String TB_D_JG="tb_d_jg";
+	public static final String TB_D_JYYX="tb_d_jyyx";
+	public static final String TB_D_MZ="tb_d_mz";
+	public static final String TB_D_XB="tb_d_xb";
+	public static final String TB_D_ZZMM="tb_d_zzmm";
+	public static final String DICT="dict";
+	public static final String TB_D_ZWMC="tb_d_zwmc";
+	public static final String TB_SYS_SYSTEM = "tb_sys_system";
+	public static final String MAN = "1";
+	public static final String WOMEN = "2";
+	
+	
+}

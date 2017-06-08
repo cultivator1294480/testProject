@@ -1,0 +1,212 @@
+package com.mininglamp.service.impl;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.dao.IPrivilegeDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Privilege;
+import com.mininglamp.pojo.Role;
+import com.mininglamp.pojo.SystemInfo;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.IPrivilegeService;
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.DateUtilPer;
+import com.mininglamp.util.ExcelUtil;
+import com.mininglamp.util.PageSupport;
+
+@Service("privilegeService")
+public class PrivilegeServiceImp  implements IPrivilegeService{
+	@Resource
+	private IPrivilegeDao privilegeDao;
+	
+
+
+
+	@Override
+	public PageSupport findPagePrivileges(PageSupport pageSupport) {
+		decode(pageSupport);
+		pageSupport.formateIn();
+		pageSupport.setItems(privilegeDao.findPagePrivileges(pageSupport));
+		pageSupport.setTotalCount(privilegeDao.findTotalCount(pageSupport));
+		pageSupport.formateOut();
+		return pageSupport;
+	}
+
+
+
+
+	private void decode(PageSupport pageSupport) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+
+
+	@Override
+	public List<SystemInfo> findSystems() {
+		List<SystemInfo> privileges =  privilegeDao.findSystems();
+		return privileges;
+		
+	}
+
+
+
+
+	@Override
+	public Result addPrivilege(HttpServletRequest request) {
+		Privilege privilege = new Privilege();
+		setAddPrivilege(privilege,request);
+		privilegeDao.addPrivilege(privilege);
+		return Result.SUCCESS;
+		
+	}
+
+	/**
+	 * request 参数到 权限信息
+	 * @param privilege
+	 * @param request 
+	 */
+	private void setAddPrivilege(Privilege privilege, HttpServletRequest request) {
+		privilege.setPrivName(request.getParameter("privName"));
+		privilege.setPrivComm(request.getParameter("privComm"));
+		privilege.setSysNo(request.getParameter("sysNo"));
+		privilege.setCreateTime(getNowString());
+		privilege.setCreateUser("张三");
+		privilege.setCreateUseridCard("13045419380345");
+//		privId:
+//			privName:权限名称:
+//			privComm:权限描述:
+//			sysNo:ST002
+	}
+	
+	
+	// 获得现在的时间
+	private String getNowString() {
+		Date currentTime = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
+		
+	
+
+
+
+
+	@Override
+	public Privilege findPrivilegeDialog(Integer privilegeId) {
+		return privilegeDao.findPrivilegeDialog(privilegeId);
+	}
+
+
+
+
+	@Override
+	public Result updatePrivilege(HttpServletRequest request) {
+		Privilege privilege = new Privilege();
+		setUpdatePrivilege(privilege, request);
+		privilegeDao.updatePrivilege(privilege);
+		return Result.SUCCESS;
+	}
+	
+
+
+	/**
+	 * 设置更新权限信息
+	 * @param privilege
+	 * @param request
+	 */
+	private void setUpdatePrivilege(Privilege privilege, HttpServletRequest request) {
+		privilege.setPrivId(Integer.parseInt(request.getParameter("privId")));
+		privilege.setPrivName(request.getParameter("privName"));
+		privilege.setPrivComm(request.getParameter("privComm"));
+		privilege.setSysNo(request.getParameter("sysNo"));
+	}
+
+
+
+
+	@Override
+	public Result deletePrivilege(Integer privId) {
+		privilegeDao.deletePrivilege(privId);
+		return Result.SUCCESS;
+	}
+
+
+
+
+	public List<Systemno> getSystemmo() {
+		return privilegeDao.getSystemmo();
+	}
+
+
+
+
+	@Override
+	public void addExcelPrivileges(MultipartFile excelFile, HttpServletRequest request) {
+		UserLogin user= (UserLogin) request.getSession().getAttribute("user");
+		ArrayList<ArrayList<String>> list = ExcelUtil.readExcel(excelFile);
+		for (int i = 2; i < list.size(); i++) {
+			insertExcelPrivileges(list.get(i),list.get(0),user);
+		}
+		
+	}
+
+
+
+
+	private void insertExcelPrivileges(ArrayList<String> arrayList, ArrayList<String> columnList, UserLogin user) {
+		Privilege privilege = new Privilege();
+		setAddExcelPrivileges(arrayList,privilege,columnList,user);
+		privilegeDao.addPrivilege(privilege);
+	}
+
+
+
+
+	private void setAddExcelPrivileges(ArrayList<String> arrayList, Privilege privilege, ArrayList<String> columnList,
+			UserLogin user) {
+		
+		for (int i = 0; i < columnList.size(); i++) {
+			if("PRIVNAME".equals(columnList.get(i))){
+				privilege.setPrivName(arrayList.get(i));
+			}
+			if("PRIVCOMM".equals(columnList.get(i))){
+				privilege.setPrivComm(arrayList.get(i));
+			}
+			if("SYSNO".equals(columnList.get(i))){
+				privilege.setSysNo(getSysNo(arrayList.get(i)));
+			}
+		}
+		privilege.setCreateTime(DateUtilPer.getNowString());
+		privilege.setCreateUser(user.getJyxm());
+		privilege.setCreateUseridCard(user.getSfzh());
+		
+	}
+	private String getSysNo(String string) {
+		Map<String, Object> mzMap = (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_SYS_SYSTEM);
+		for (Entry<String, Object> entry : mzMap.entrySet()) {
+			if(string.equals(entry.getValue())){
+				return entry.getKey() ;
+			}
+		}
+		return null;
+	}
+
+
+}

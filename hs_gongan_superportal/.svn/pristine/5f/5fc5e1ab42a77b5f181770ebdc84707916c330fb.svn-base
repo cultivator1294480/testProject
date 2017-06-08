@@ -1,0 +1,85 @@
+package com.mininglamp.controller;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.service.ICodeService;
+import com.mininglamp.service.ISystemsService;
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.PageSupport;
+
+@Controller
+@RequestMapping("/mult/")
+public class SystemController {
+	@Resource
+	private ISystemsService systemService;
+	
+	@Resource
+	private ICodeService codeService;
+	
+	
+	@RequestMapping("/registSystem")//添加
+	@ResponseBody
+	public Result registSystem(HttpServletRequest request,HttpServletResponse response ,Model model,Systemno system){
+		Result result = systemService.registSystem(system,request);
+		// 刷新内存中信息
+		refreshCachFactory();
+		return result;
+	}
+	
+	/**
+	 * 刷新内存中信息
+	 */
+	private void refreshCachFactory() {
+		//刷新cachfactory
+		Map<String, Object> userMap = CachFactory.getInstance().getMapByKey(Constants.DICT);
+        Map<String, Map<String, String>> mapd = codeService.getCode();
+        userMap.putAll(mapd);
+	}
+
+
+	@RequestMapping("/Allsystems")//展示列表
+	public String getAllsystems(PageSupport pageSupport,Model model){
+		pageSupport =systemService.getAllsystem(pageSupport);
+		model.addAttribute("pageSupport", pageSupport);
+		return "system/addSystem";
+	}
+	
+	
+	
+	@RequestMapping("/updateSystem")
+	@ResponseBody
+	public Result getUpdateSystem(HttpServletRequest request,Systemno sys){
+		Result result =  systemService.getUpdateSystem(sys);
+		// 刷新内存中信息
+		refreshCachFactory();
+		return result;
+	}
+	@RequestMapping("findSysById")
+	@ResponseBody
+	public Systemno getfindSysById(HttpServletRequest request){
+		Systemno sys=new Systemno();
+		sys.setSysno(request.getParameter("sysno"));
+		return systemService.getfindSysById(sys);
+	}
+	@ResponseBody
+	@RequestMapping("/deleteSystem")
+	public Result deleteDept(HttpServletRequest request,Systemno sys) {
+		sys.setSysno(request.getParameter("sysno"));
+		Result result = systemService.deleteSystem(sys);
+		// 刷新内存中信息
+		refreshCachFactory();
+		return result;
+	}	
+}

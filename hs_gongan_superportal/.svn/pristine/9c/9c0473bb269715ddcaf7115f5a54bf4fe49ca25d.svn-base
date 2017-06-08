@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.IUserDao">
+    <resultMap id="user" type="com.mininglamp.pojo.User">
+        <id column="USERID" property="userId"></id>
+		<result column="LOGINID" property="loginId"></result>
+		<result column="JH" property="jh"></result>
+		<result column="JYXM" property="jyxm"></result>
+		<result column="XB" property="xb"></result>
+		<result column="SFZH" property="sfzh"></result>
+		<result column="CSRQ" property="csrq"></result>
+		<result column="JG" property="jg"></result>
+		<result column="MZ" property="mz"></result>
+		<result column="ZZMM" property="zzmm"></result>
+		<result column="GZDWMC" property="gzdwmc"></result>
+		<result column="GZDWDM" property="gzdwdm"></result>
+		<result column="CJGZSJ" property="cjgzsj"></result>
+		<result column="CJGAGZSJ" property="cjgagzsj"></result>
+		<result column="ZWMC" property="zwmc"></result>
+		<result column="ZWSM" property="zwsm"></result>
+		<result column="PZRZRQ" property="pzrzrq"></result>
+		<result column="JYYX" property="jyyx"></result>
+		<result column="SJXRQ" property="sjxrq"></result>
+		<result column="BGSDHHM" property="bgsdhhm"></result>
+		<result column="SJHM" property="sjhm"></result>
+		<result column="CREATETIME" property="createTime"></result>
+		<result column="UPDATETIME" property="updateTime"></result>
+		<result column="ISLOCK" property="isLock"></result>
+		<result column="PASSWORD" property="password"></result>
+		<result column="ENDTIME" property="endTime"></result>
+		<result column="COMMENTS" property="comments"></result>
+		<result column="REMARKS" property="remarks"></result>
+    </resultMap>
+
+
+	<select id="findUser" resultMap="user" parameterType="int">
+		select * from tb_sys_user where userId = #{userId}
+	</select>
+    
+    <!-- 查询 用户信息-->
+	<select id="findPageUsers" resultMap="user"
+		parameterType="com.mininglamp.util.PageSupport">
+		select * 	
+		from tb_sys_user order by USERID desc
+	<if test="num!=null and pageSize!=null">
+		limit #{num},#{pageSize}
+	</if>
+	</select>
+	
+	<select id="findTotalCount" resultType="int">
+		select count(USERID) from tb_sys_user
+	</select>
+	
+	
+	
+	
+    <select id="selectUser" resultMap="user" >
+ 		select  *  from tb_sys_user
+    </select>
+
+
+	<!-- 插入一条用户信息 -->
+	<insert id="insert" parameterType="com.mininglamp.pojo.User"
+		useGeneratedKeys="true" keyProperty="USERID">
+	INSERT INTO TB_SYS_USER
+	(
+	LOGINID,
+	JH,
+	JYXM,
+	XB,
+	SFZH,
+	CSRQ,
+	JG,
+	MZ,
+	ZZMM,
+	GZDWMC,
+	GZDWDM,
+	CJGZSJ,
+	CJGAGZSJ,
+	ZWMC,
+	ZWSM,
+	PZRZRQ,
+	JYYX,
+	SJXRQ,
+	BGSDHHM,
+	SJHM,
+	CREATETIME,
+	UPDATETIME,
+	ISLOCK,
+	PASSWORD,
+	ENDTIME
+	)
+	VALUES
+	(
+	#{loginId},
+	#{jh},
+	#{jyxm},
+	#{xb},
+	#{sfzh},
+	#{csrq},
+	#{jg},
+	#{mz},
+	#{zzmm},
+	#{gzdwmc},
+	#{gzdwdm},
+	#{cjgzsj},
+	#{cjgagzsj},
+	#{zwmc},
+	#{zwsm},
+	#{pzrzrq},
+	#{jyyx},
+	#{sjxrq},
+	#{bgsdhhm},
+	#{sjhm},
+	#{createTime},
+	#{updateTime},
+	#{isLock},
+	#{password},
+	#{endTime}
+	);
+	</insert>
+
+
+	<!-- 更新用户信息 -->
+	<update id="updateUser" parameterType="com.mininglamp.pojo.User">
+	UPDATE TB_SYS_USER
+	SET
+
+	LOGINID=#{loginId},
+	JH=#{jh},
+	JYXM=#{jyxm},
+	XB=#{xb},
+	SFZH=#{sfzh},
+	CSRQ=#{csrq},
+	JG=#{jg},
+	MZ=#{mz},
+	ZZMM=#{zzmm},
+	GZDWMC=#{gzdwmc},
+	GZDWDM=#{gzdwdm},
+	CJGZSJ=#{cjgzsj},
+	CJGAGZSJ=#{cjgagzsj},
+	ZWMC=#{zwmc},
+	ZWSM=#{zwsm},
+	PZRZRQ=#{pzrzrq},
+	JYYX=#{jyyx},
+	SJXRQ=#{sjxrq},
+	BGSDHHM=#{bgsdhhm},
+	SJHM=#{sjhm},
+	CREATETIME=#{createTime},
+	UPDATETIME=#{updateTime},
+	ISLOCK=#{isLock},
+	PASSWORD=#{password},
+	ENDTIME=#{endTime}
+	WHERE userId = #{userId}
+	</update>
+	
+	 <!-- 删除用户信息 -->  
+    <delete id="delete" parameterType="com.mininglamp.pojo.User">  
+        delete from TB_SYS_USER WHERE userId = #{userId}
+    </delete>  
+</mapper>

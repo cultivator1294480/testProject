@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.IPrivilegeDao">
+
+
+<!--  -->
+
+
+
+	<!-- 插入一条部门信息 -->
+	<insert id="addPrivilege" parameterType="com.mininglamp.pojo.Privilege">
+
+		INSERT INTO tb_sys_privilege
+		(
+		PRIVNAME,
+		PRIVCOMM,
+		SYSNO,
+		CREATETIME,
+		CREATEUSER,
+		CREATEUSERIDCARD
+		)
+		VALUES
+		(
+		#{privName},
+		#{privComm},
+		#{sysNo},
+		#{createTime},
+		#{createUser},
+		#{createUseridCard}
+		);
+	</insert>
+
+
+
+
+	<resultMap id="systemInfo" type="com.mininglamp.pojo.SystemInfo">
+	<!-- 	SYSNO  系统编号  				varchar    6 -->
+		<result column="SYSNO" property="sysNo"></result> 
+		<result column="SYSNAME" property="sysName"></result> 
+		<result column="SYSCOMM" property="sysComm"></result> 
+		<result column="SYSVERSION" property="sysVersion"></result> 
+		<result column="SYSURL" property="sysUrl"></result> 
+		<result column="REGUSERNAME" property="regUsername"></result> 
+		<result column="REGUSERIDCARD" property="regUserIdCard"></result> 
+		<result column="SYSREGISTTIME" property="sysRegistTime"></result> 
+		<result column="SYSNCTIME" property="sysNcTime"></result> 
+		<result column="CONADDR" property="conAddr"></result> 
+		<result column="ROLECTRL" property="roleCtrl"></result> 
+		<result column="OWNERSHIP" property="ownerShip"></result> 
+	</resultMap>
+<!-- 	查询系统信息-->
+	<select id="findSystems" resultMap="systemInfo">
+		select
+		*
+		from tb_sys_system 
+	</select>
+
+	<select id="findTotalCount" resultType="int">
+	select count(8) from(
+		select
+		*
+		from tb_sys_privilege where 1=1
+     	<if test=" null !=  search  and null !=  search.privName and ''!=search.privName ">
+    		and PRIVNAME LIKE CONCAT('%',#{search.privName},'%')
+    	</if>
+    	<if test=" null !=  search  and null !=  search.sysNo and ''!=search.sysNo ">
+    		and SYSNO LIKE CONCAT('%',#{search.sysNo},'%')
+    	</if>
+	) as countAlias
+	</select>
+
+
+<!-- 查询 -->
+	<resultMap id="privilege" type="com.mininglamp.pojo.Privilege">
+		<id column="PRIVID" property="privId"></id>
+		<result column="PRIVNAME" property="privName"></result>
+		<result column="PRIVCOMM" property="privComm"></result>
+		<result column="SYSNO" property="sysNo"></result>
+		<result column="CREATETIME" property="createTime"></result>
+		<result column="CREATEUSER" property="createUser"></result>
+		<result column="CREATEUSERIDCARD" property="createUseridCard"></result>
+	</resultMap>
+	<select id="findPagePrivileges" resultMap="privilege"
+		parameterType="com.mininglamp.util.PageSupport">
+		select
+		*
+		from tb_sys_privilege where 1=1
+     	<if test=" null !=  search  and null !=  search.privName and ''!=search.privName ">
+    		and PRIVNAME LIKE CONCAT('%',#{search.privName},'%')
+    	</if>
+    	<if test=" null !=  search  and null !=  search.sysNo and ''!=search.sysNo ">
+    		and SYSNO = #{search.sysNo}
+    	</if>
+    	order by privid desc
+		limit #{startLine},#{pageSize}
+	</select>
+
+
+	<select id="findPrivilegeDialog" resultMap="privilege" parameterType="int">
+		select * from tb_sys_privilege where  PRIVID = #{privilegeId}
+	</select>
+
+
+
+	<!-- 更新用户权限 -->
+	<update id="updatePrivilege" parameterType="com.mininglamp.pojo.Privilege">
+		UPDATE
+		tb_sys_privilege
+		SET
+		PRIVNAME = #{privName},
+		PRIVCOMM = #{privComm},
+		SYSNO = #{sysNo}
+		WHERE PRIVID = #{privId}
+	</update>
+	
+	<!-- 删除权限信息 -->
+	<delete id="deletePrivilege" parameterType="int">
+		delete from tb_sys_privilege where PRIVID = #{privId}
+	</delete>
+	
+	
+	<select id="getSystemmo" resultType="com.mininglamp.pojo.Systemno">
+		select sysname,sysno from tb_sys_system
+	</select>
+
+
+</mapper>

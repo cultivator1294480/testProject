@@ -1,0 +1,182 @@
+package com.mininglamp.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.mininglamp.pojo.DeskJson;
+import com.mininglamp.pojo.DeskTopApp;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.IDesktopService;
+import com.mininglamp.service.ILogService;
+import com.mininglamp.util.MD5Util;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@Controller
+public class LogController {
+
+	@Resource
+	private ILogService loginService;
+	@Resource
+	private IDesktopService desktopService;
+
+	@RequestMapping("/assets/tologin")
+	public String getlogin(HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		 return "logs/login";
+	}
+	
+	@RequestMapping("/logs/loginid")
+	public String login(HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+		String loginid = request.getParameter("loginid");
+		String pw = request.getParameter("password");
+		String password = MD5Util.MD5Encode(pw);
+		if (null == loginid || loginid == "" || null == password
+				|| password == "") {
+			return "logs/login";
+		}
+		UserLogin user = this.loginService.getLogin(loginid, password);
+		if (null == user) {
+			return "logs/login";
+		}
+		request.getSession().setAttribute("user", user);
+		return "redirect:frontmain";
+	}
+
+	@RequestMapping("/logs/frontmain")
+	public String frontmain(HttpServletRequest request, Model model) {
+		UserLogin user = (UserLogin) request.getSession().getAttribute("user");
+		if(user == null){
+			return "logs/login";
+		}
+		DeskJson userAppsOps = loginService.getUserId(user.getUserid());
+		List<String> userPriv = this.loginService.getPrivById(user.getLoginid());
+		request.getSession().setAttribute("privList", userPriv);
+		/*
+		 * OPS
+		 */
+		StringBuilder ops = new StringBuilder();
+//		StringBuilder leftMenu=new StringBuilder();
+		if (userAppsOps == null) {
+			// 初始化 桌面  ST001 默认为应 用市场
+			ops.append("{\"Icon1\":[\"ST001\"],\"Icon2\":[\"ST001\"],\"Icon3\":[\"ST001\"],")
+				.append("\"Icon4\":[\"ST001\"],\"Icon5\":[\"ST001\"],\"Icon6\":[\"ST001\"],")
+				.append("\"Icon7\":[\"ST001\"],\"Icon8\":[\"ST001\"]}");
+			
+		}else{
+				 ops.append("{\"Icon1\":")
+					.append(getDeskOps("DESKTOP1", userAppsOps.getDesktop1()))
+					.append(",\"Icon2\":")
+					.append(getDeskOps("DESKTOP2", userAppsOps.getDesktop2()))
+					.append(",\"Icon3\":")
+					.append(getDeskOps("DESKTOP3", userAppsOps.getDesktop3()))
+					.append(",\"Icon4\":")
+					.append(getDeskOps("DESKTOP4", userAppsOps.getDesktop4()))
+					.append(",\"Icon5\":")
+					.append(getDeskOps("DESKTOP5", userAppsOps.getDesktop5()))
+					.append(",\"Icon6\":")
+					.append(getDeskOps("DESKTOP6", userAppsOps.getDesktop6()))
+					.append(",\"Icon7\":")
+					.append(getDeskOps("DESKTOP7", userAppsOps.getDesktop7()))
+					.append(",\"Icon8\":")
+					.append(getDeskOps("DESKTOP8", userAppsOps.getDesktop8()))
+					.append("}");
+		 }	
+		String leftMenu=new String();
+		if(userAppsOps == null){
+			leftMenu = ("{\"DOCK\":[]}");
+		}else{
+			JSONObject dockApps = JSONObject.fromObject(userAppsOps.getDock());
+			JSONArray dockAppsArr = dockApps.getJSONArray("DOCK");
+			leftMenu= dockAppsArr.toString();
+		}
+		/*
+		 * leftMenu
+		 */
+		Map<String, Map<String, Object>> map = getDesktopSapp(userAppsOps,user.getUserid());
+		JSONObject app = JSONObject.fromObject(map.get("app"));
+		JSONObject sApp = JSONObject.fromObject(map.get("sApp"));
+		model.addAttribute("app", app);
+		model.addAttribute("sApp", sApp);
+		model.addAttribute("ops", ops);
+		model.addAttribute("leftMenuList", leftMenu);
+		model.addAttribute("userKey",MD5Util.encrypt(user.getSfzh()));
+		return "logs/frontmain";
+	}
+
+	private String getDeskOps(String key, String deskOps) {
+		JSONObject JdeskOps = JSONObject.fromObject(deskOps);
+		return JdeskOps.get(key).toString();
+	}
+
+	private Map<String, Map<String, Object>> getDesktopSapp(DeskJson userApps, int userId) {
+		/*
+		 * get App
+		 * 
+		 * All Apps
+		 */
+		@SuppressWarnings("unchecked")
+		Map<String, Systemno> mySysMap = desktopService.getSys2Map(userId);// 获取所有desktop systems
+																		// systems
+		Map<String, Map<String, Object>> returnMap = new HashMap<String, Map<String, Object>>();
+
+		Map<String, Object> allSysMap = new HashMap<String, Object>();
+		for (String sysKey : mySysMap.keySet()) {
+			int i = 1;
+			Systemno curSys = mySysMap.get(sysKey);
+			DeskTopApp dta = new DeskTopApp();
+			dta.setAppid(curSys.getSysno());
+			dta.setIcon(curSys.getConaddr());
+			dta.setName(curSys.getSysname());
+			dta.setSonMenu(null);
+			dta.setUrl(curSys.getSysurl());
+			dta.setAsc(i++ + "");
+			allSysMap.put(curSys.getSysno(), dta);
+		}
+		returnMap.put("app", allSysMap);
+
+		/*
+		 * get sApp {"DOCK":["4","5"]}
+		 */
+		String sApp=new String();
+		if(null == userApps|| null==userApps.getDock()){
+			sApp= ("{\"DOCK\":[]}");
+		}else{
+			JSONObject dockApps = JSONObject.fromObject(userApps.getDock());
+			JSONArray dockAppsArr = dockApps.getJSONArray("DOCK");
+			Map<String, Object> sAppMap = new HashMap<String, Object>();
+			for (int i = 0; i < dockAppsArr.size(); i++) {
+				String sysno = (String) dockAppsArr.get(i);
+				Systemno curSys = mySysMap.get(sysno);
+				DeskTopApp dta = new DeskTopApp();
+				dta.setAppid(curSys.getSysno());
+				dta.setIcon(curSys.getConaddr());
+				dta.setName(curSys.getSysname());
+				dta.setSonMenu(null);
+				dta.setUrl(curSys.getSysurl());
+				dta.setAsc(i + "");
+				sAppMap.put(curSys.getSysno(), dta);
+			}
+			returnMap.put("sApp", sAppMap);
+		}
+		return returnMap;
+	}
+
+	@RequestMapping("/log2")
+	public String top(HttpServletRequest request, Model model) {
+		return "logs/frontmain";
+	}
+	
+}

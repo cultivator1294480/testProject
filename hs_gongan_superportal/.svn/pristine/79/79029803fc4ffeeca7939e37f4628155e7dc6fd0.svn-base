@@ -1,0 +1,16 @@
+package com.mininglamp.dao;
+
+import java.util.Map;
+
+import org.mybatis.spring.annotation.MapperScan;
+
+@MapperScan
+public interface ExcelUtilDao{
+
+	/**
+	 * 保存excel中部门信息
+	 * @param deptColumValue
+	 */
+	public void saveExcel(Map<String, Object> columnValues);  
+	
+}

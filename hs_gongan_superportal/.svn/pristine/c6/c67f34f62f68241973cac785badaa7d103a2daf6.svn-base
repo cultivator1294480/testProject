@@ -1,0 +1,33 @@
+package com.mininglamp.service;
+
+import java.util.List;
+
+import com.mininglamp.pojo.DeskJson;
+import com.mininglamp.pojo.DeskTopApp;
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.UserLogin;
+
+public interface ILogService {
+
+	public UserLogin getLogin(String loginid, String password);
+
+	public DeskJson getUserId(int userid);
+
+	public DeskTopApp getApp(int userid);
+
+	public Desktopyy getDesktopyy(int userid);
+	
+	
+//==============================================================
+
+
+//	public 	Map<String, Systemno> getAppRole(int userid);
+
+	/**
+	 * 根据登录名称查找权限信息
+	 * @param Login
+	 * @return
+	 */
+	public List<String> getPrivById(String loginid);
+
+}

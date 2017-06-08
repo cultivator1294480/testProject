@@ -1,0 +1,75 @@
+package com.mininglamp.service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Privilege;
+import com.mininglamp.pojo.SystemInfo;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.util.PageSupport;
+
+public interface IPrivilegeService {
+
+	/**
+	 * 分页查询用户权限信息
+	 * @param startNum
+	 * @return
+	 */
+	public PageSupport findPagePrivileges(PageSupport pageSupport);
+
+	/**
+	 * 查询系统信息
+	 * @return
+	 */
+	public List<SystemInfo> findSystems();
+
+	
+	/**
+	 * 添加权限信息
+	 * @param request
+	 * @return 
+	 */
+	public Result addPrivilege(HttpServletRequest request);
+
+	/**
+	 * 查询权限信息
+	 * @param privilegeId
+	 * @return
+	 */
+	public Privilege findPrivilegeDialog(Integer privilegeId);
+
+	/**
+	 * 更新权限信息
+	 * @param request
+	 * @return
+	 */
+	public Result updatePrivilege(HttpServletRequest request);
+
+	/**
+	 * 删除权限信息
+	 * @param privId
+	 * @return
+	 */
+	public Result deletePrivilege(Integer privId);
+
+	public List<Systemno> getSystemmo();
+
+	/**
+	 * 批量添
+	 * @param excelFile
+	 */
+
+	public void addExcelPrivileges(MultipartFile excelFile, HttpServletRequest request);
+
+
+
+	
+	
+
+
+
+}

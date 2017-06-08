@@ -1,0 +1,71 @@
+package com.mininglamp.controller;
+
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.jms.Session;
+import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.IDesktopService;
+
+@Controller
+//@RequestMapping("/mult/")
+public class DesktopController {
+
+	@Resource
+	private IDesktopService desktopService;
+	
+	@RequestMapping("/update/system/{conArr}/{leftArr}/{topIndex}")
+	@ResponseBody
+	public String updateDept( @PathVariable String conArr[],@PathVariable String leftArr[],@PathVariable String topIndex,HttpServletRequest request){
+		String column = "DESKTOP"+topIndex;
+		JSONArray conter=JSONArray.fromObject(conArr);
+		String conApp=conter.toString();
+		JSONArray left=JSONArray.fromObject(leftArr);
+		String leftApp=left.toString().replace("null","");
+		String icon= "DOCK";
+		StringBuilder icon_str = new StringBuilder();
+		icon_str.append("{\"").append(icon).append("\":").append(leftApp).append("}");
+		StringBuilder conter_str = new StringBuilder();
+		conter_str.append("{\"").append(column).append("\":").append(conApp).append("}");
+		
+		
+		UserLogin user= (UserLogin) request.getSession().getAttribute("user");
+		//修改
+		int updateCounts = desktopService.updateDesk(conter_str.toString(),icon_str.toString(),column,user.getUserid());
+		if(updateCounts==0){
+			//拼接添加的key
+			String  clomns="SYSNO,USERID,DOCK,DESKTOP1,DESKTOP2,DESKTOP3,DESKTOP4,DESKTOP5,DESKTOP6,DESKTOP7,DESKTOP8";
+			//拼接添加值
+			StringBuilder otherDesktop = new StringBuilder("'ST001',")
+					.append(user.getUserid()).append(",'")
+					.append(icon_str.toString()).append("','");
+			
+		  for (int i = 1; i <= 8; i++) {
+			  if(i==Integer.parseInt(topIndex)){
+				  otherDesktop.append(conter_str.toString()).append("',"); 
+			  }else{
+				  otherDesktop.append("'{\"DESKTOP").append(i).append("\":[\"ST001\"]}'").append(",");  
+			  }
+		 }
+		  String values = otherDesktop.toString();
+		  int insertCounts = desktopService.addDesk(clomns,values.substring(0,values.length()-1));
+		}
+		return "logs/frontmain";
+	}
+	
+}

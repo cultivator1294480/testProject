@@ -1,0 +1,27 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import net.sf.json.JSONArray;
+
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.DeskJson;
+@MapperScan
+public interface DesktopDao {
+
+
+	public Desktopyy getdesktopid();
+
+	public int updateDesk(@Param("conApp")String conApp,@Param("userid") int userid,@Param("leftApp") String leftApp,
+			@Param("column")String column);
+
+	public int getSelectdesktop(int userid);
+
+	public int addDesk(@Param("clomns") String clomns,@Param("otherDesktop") String  otherDesktop);
+
+	
+}

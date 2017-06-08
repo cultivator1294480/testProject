@@ -1,0 +1,65 @@
+package com.mininglamp.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+
+import com.mininglamp.dao.ICodeDao;
+import com.mininglamp.pojo.Code;
+import com.mininglamp.service.ICodeService;
+import com.mininglamp.util.Constants;
+
+
+@Service("codeService")
+public class CodeServiceImpl  implements ICodeService{
+	@Resource
+	private ICodeDao codeDao;
+	
+	
+	
+	public Map<String, Map<String, String>> getCode(){
+		
+		Map<String, Map<String, String>> map = new HashMap<String, Map<String,String>>();
+		map.put("tb_d_gzdwdm",getSubCode("tb_d_gzdwdm"));
+		map.put("tb_d_jg",getSubCode("tb_d_jg"));
+		map.put("tb_d_jyyx",getSubCode("tb_d_jyyx"));
+		map.put("tb_d_mz",getSubCode("tb_d_mz"));
+		map.put("tb_d_xb",getSubCode("tb_d_xb"));
+		map.put("tb_d_zzmm",getSubCode("tb_d_zzmm"));
+		map.put(Constants.TB_D_ZWMC,getSubCode(Constants.TB_D_ZWMC));
+		map.put(Constants.TB_SYS_SYSTEM,getSubCodeSystem(Constants.TB_SYS_SYSTEM));
+		return map;
+	}
+
+
+
+	private Map<String, String> getSubCodeSystem(String tableName) {
+		Map<String, String> table = new HashMap<String, String>();
+		table.put("tableName", tableName);
+		List<Code> codes =codeDao.getSystem(table);
+		Map<String, String> subCodeMap = new HashMap<String, String>();
+		for (Code code : codes) {
+			subCodeMap.put(code.getKey(), code.getValue());
+		}
+		return subCodeMap;
+	}
+
+
+
+	private Map<String, String> getSubCode(String tableName) {
+		Map<String, String> table = new HashMap<String, String>();
+		table.put("tableName", tableName);
+		List<Code> codes =codeDao.getDic(table);
+		Map<String, String> subCodeMap = new HashMap<String, String>();
+		for (Code code : codes) {
+			subCodeMap.put(code.getKey(), code.getValue());
+		}
+		return subCodeMap;
+	}
+	
+	
+}

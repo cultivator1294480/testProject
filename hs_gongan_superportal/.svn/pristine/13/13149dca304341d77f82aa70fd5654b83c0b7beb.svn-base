@@ -1,0 +1,60 @@
+package com.mininglamp.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import net.sf.json.JSONArray;
+
+import org.springframework.stereotype.Service;
+
+import com.mininglamp.dao.DesktopDao;
+import com.mininglamp.dao.SystemDao;
+import com.mininglamp.pojo.DeskTopApp;
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.service.IDesktopService;
+import com.mininglamp.util.PageSupport;
+
+@Service("desktopService")
+public class DesktopServiceImpl implements IDesktopService {
+
+	@Resource
+	private DesktopDao desktopDao;
+
+	@Resource
+	private SystemDao systemDao;
+
+	public Map<String,Systemno> getSys2Map(int userId) {
+		Map<String,Systemno> sysMap = new HashMap<String,Systemno>();
+		List<Systemno> myList = systemDao.getAllsystems(userId);
+		for (Systemno systemno : myList) {
+			sysMap.put(systemno.getSysno(), systemno);
+		}
+		return sysMap;
+	}
+
+	public Desktopyy getdesktopid() {
+		return desktopDao.getdesktopid();
+	}
+
+	@Override
+	public int updateDesk(String conApp, String leftApp,
+			String column, int userid) {
+		return desktopDao.updateDesk(conApp, userid, leftApp, column);
+	}
+
+	public int getSelectdesktop(int userid) {
+		return desktopDao.getSelectdesktop(userid);
+	}
+
+	public int addDesk(String clomns,String otherDesktop) {
+		
+		return desktopDao.addDesk(clomns, otherDesktop);
+		
+	}
+
+	
+}

@@ -1,0 +1,382 @@
+package com.mininglamp.pojo;
+
+import java.util.Map;
+
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.DateUtilPer;
+
+public class User {
+	//用户id
+	private Integer userId;
+	
+	//用户名
+	private String loginId;
+	
+	//警号
+	private String jh;
+	
+	// 姓名
+	private String jyxm;
+	
+	// 性别|字典	
+	private String xb;
+	//性别(字符串)
+	private String xb_value;
+
+	// 身份证号
+	private String sfzh;
+	
+	// 出生日期
+	private String csrq;
+		
+	// 籍贯|字典
+	private String jg;
+	
+	// 籍贯|字典(value)
+	private String jg_value;
+	
+	// 民族|字典
+	private String mz;
+	// 民族|字典
+	private String mz_value;
+	
+	// 政治面貌|字典
+	private String zzmm;
+	
+	private String zzmm_value;
+	
+	// 工作单位
+	private String gzdwmc;
+
+	// 工作单位代码|字典
+	private String gzdwdm;
+	
+	// 参加工作时间
+	private String cjgzsj;
+
+	// 参加公安工作时间
+	private String cjgagzsj;
+		
+	// 职务名称
+	private String zwmc;
+	
+	// 职务说明
+	private String zwsm;
+		
+	// 批准任职日期
+	private String pzrzrq;
+	
+	// 警衔|字典
+	private String jyyx;
+	
+	// 授衔日期
+	private String sjxrq;
+	
+	// 办公室电话
+	private String bgsdhhm;
+	
+	// 电话号码
+	private String sjhm;
+	
+	// 创建时间	
+	private String createTime;
+	
+	//更新时间
+	private String updateTime;
+	
+	// 是否可用
+	private String  isLock;
+	
+	// 密码
+	private String  password;
+	
+	// 用户使用期限
+	private String  endTime;
+
+	// 说明
+	private String comments;
+	
+	// 备注
+	private String remarks;
+
+	
+	
+	public String getMz_value() {
+		return mz_value;
+	}
+
+	public void setMz_value(String mz_value) {
+		this.mz_value = mz_value;
+	}
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
+	public String getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+
+	public String getJh() {
+		return jh;
+	}
+
+	public void setJh(String jh) {
+		this.jh = jh;
+	}
+
+	public String getJyxm() {
+		return jyxm;
+	}
+
+	public void setJyxm(String jyxm) {
+		this.jyxm = jyxm;
+	}
+
+	public String getXb() {
+		return xb;
+	}
+
+	public void setXb(String xb) {
+		this.xb = xb;
+	}
+
+	public String getSfzh() {
+		return sfzh;
+	}
+
+	public void setSfzh(String sfzh) {
+		this.sfzh = sfzh;
+	}
+
+	public String getCsrq() {
+		return csrq;
+	}
+
+	public void setCsrq(String csrq) {
+		this.csrq = csrq;
+	}
+
+	public String getJg() {
+		return jg;
+	}
+
+	public void setJg(String jg) {
+		this.jg = jg;
+	}
+
+	public String getMz() {
+		return mz;
+	}
+
+	public void setMz(String mz) {
+		this.mz = mz;
+	}
+
+	public String getZzmm() {
+		return zzmm;
+	}
+
+	public void setZzmm(String zzmm) {
+		this.zzmm = zzmm;
+	}
+
+	public String getGzdwmc() {
+		return gzdwmc;
+	}
+
+	public void setGzdwmc(String gzdwmc) {
+		this.gzdwmc = gzdwmc;
+	}
+
+	public String getGzdwdm() {
+		return gzdwdm;
+	}
+
+	public void setGzdwdm(String gzdwdm) {
+		this.gzdwdm = gzdwdm;
+	}
+
+	public String getCjgzsj() {
+		return cjgzsj;
+	}
+
+	public void setCjgzsj(String cjgzsj) {
+		this.cjgzsj = cjgzsj;
+	}
+
+	public String getCjgagzsj() {
+		return cjgagzsj;
+	}
+
+	public void setCjgagzsj(String cjgagzsj) {
+		this.cjgagzsj = cjgagzsj;
+	}
+
+	public String getZwmc() {
+		return zwmc;
+	}
+
+	public void setZwmc(String zwmc) {
+		this.zwmc = zwmc;
+	}
+
+	public String getZwsm() {
+		return zwsm;
+	}
+
+	public void setZwsm(String zwsm) {
+		this.zwsm = zwsm;
+	}
+
+	public String getPzrzrq() {
+		return pzrzrq;
+	}
+
+	public void setPzrzrq(String pzrzrq) {
+		this.pzrzrq = pzrzrq;
+	}
+
+	public String getJyyx() {
+		return jyyx;
+	}
+
+	public void setJyyx(String jyyx) {
+		this.jyyx = jyyx;
+	}
+
+	public String getSjxrq() {
+		return sjxrq;
+	}
+
+	public void setSjxrq(String sjxrq) {
+		this.sjxrq = sjxrq;
+	}
+
+	public String getBgsdhhm() {
+		return bgsdhhm;
+	}
+
+	public void setBgsdhhm(String bgsdhhm) {
+		this.bgsdhhm = bgsdhhm;
+	}
+
+	public String getSjhm() {
+		return sjhm;
+	}
+
+	public void setSjhm(String sjhm) {
+		this.sjhm = sjhm;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(String updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getIsLock() {
+		return isLock;
+	}
+
+	public void setIsLock(String isLock) {
+		this.isLock = isLock;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public String getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(String remarks) {
+		this.remarks = remarks;
+	}
+//
+//	public String getXb_value() {
+//		return xb_value;
+//	}
+
+	public String getXb_value() {
+		return xb_value;
+	}
+
+	public void setXb_value(String xb_value) {
+		this.xb_value = xb_value;
+	}
+
+	public String getJg_value() {
+		return jg_value;
+	}
+
+	public void setJg_value(String jg_value) {
+		this.jg_value = jg_value;
+	}
+
+	public String getZzmm_value() {
+		return zzmm_value;
+	}
+
+	public void setZzmm_value(String zzmm_value) {
+		this.zzmm_value = zzmm_value;
+	}
+//e10adc3949ba59abbe56e057f20f883e
+	
+	public void form() {
+		this.xb_value = 
+				(String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_XB)).get(xb);
+		this.jg_value = 
+				 (String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_JG)).get(jg);
+		this.zzmm_value=
+				 (String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_ZZMM)).get(zzmm);
+		this.mz_value=
+				 (String)((Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_D_MZ)).get(mz);
+		this.csrq = DateUtilPer.dateFormate(csrq);
+		this.cjgzsj =DateUtilPer.dateFormate(cjgzsj);
+		this.cjgagzsj = DateUtilPer.dateFormate(cjgagzsj);
+		this.pzrzrq = DateUtilPer.dateFormate(pzrzrq);
+		this.sjxrq = DateUtilPer.dateFormate(sjxrq);
+	}
+
+}

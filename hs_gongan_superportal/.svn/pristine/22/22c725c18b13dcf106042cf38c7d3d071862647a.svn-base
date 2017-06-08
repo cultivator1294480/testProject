@@ -1,0 +1,74 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.Role;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.RolePrivilegeVo;
+
+@MapperScan
+public interface IRoleDao{
+
+	public String countRoles();
+
+	public Integer  findCountRole(Role role);
+	/**
+	 * 插入用户角色信息
+	 * @param role
+	 */
+	public void saveRole(Role role);
+	/**
+	 * 更新用戶角色信息
+	 * @param role
+	 */
+	public void updateRole(Role role);
+
+	/**
+	 * 删除部门
+	 * @param role
+	 */
+	public void deleteRole(Role role);
+	
+	public List<Role> findPageRoles(PageSupport pageSupport);
+	
+	public Integer findTotalCount(PageSupport pageSupport);
+	
+	/**
+	 * 根据 id查找部门信息
+	 * @param dept
+	 * @return
+	 */
+	public Role findRoleById(Role role);
+	/**
+	 * 查询下拉框Sysno内容
+	 * @return
+	 */
+	public Map<String,String> findSysNo();
+
+	/**
+	 * 查询角色在本系统内的所有角色信息
+	 * @param roleId
+	 * @return
+	 */
+	public List<RolePrivilegeVo> findRolePrivilegeVo(@Param("roleId") Integer roleId);
+
+	/**
+	 * 删除角色在指定系统的角色
+	 * @param roleId
+	 * @param sysNo
+	 */
+	public void deleteRolePrivileg(@Param("roleId") Integer roleId, @Param("sysNo") String sysNo);
+
+	/**
+	 * 添加用户角色信息
+	 * @param roleId
+	 * @param sysNo
+	 * @param parseInt
+	 */
+	public void addRolePrivilege(@Param("roleId") Integer roleId,@Param("sysNo") String sysNo, @Param("privId") int privId);
+	
+}

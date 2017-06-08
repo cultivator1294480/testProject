@@ -1,0 +1,49 @@
+package com.mininglamp.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Dept;
+import com.mininglamp.pojo.WorkUnit;
+import com.mininglamp.util.PageSupport;
+
+public interface IDeptService {
+
+	/**
+	 * 分页查询部门信息
+	 * @param startNum
+	 * @return
+	 */
+	public PageSupport findPageDepts(int pageNo,String code,String deptName);
+
+	
+	public PageSupport findPageDepts(PageSupport pageSupport);
+	
+
+
+
+	/**
+	 * 更新部门信息
+	 * @param dept
+	 * @return
+	 */
+	public Result updateDept(Dept dept);
+
+
+
+
+	Result addWorkUnit(HttpServletRequest request);
+
+	/**
+	 * 查询工作单位信息
+	 * @param workUnit
+	 * @return
+	 */
+	public WorkUnit findWorkUnit(WorkUnit workUnit);
+
+	public Result updateWorkUnit(HttpServletRequest request);
+
+	public Result deleteWorkUnit(WorkUnit workUnit);
+
+	
+}

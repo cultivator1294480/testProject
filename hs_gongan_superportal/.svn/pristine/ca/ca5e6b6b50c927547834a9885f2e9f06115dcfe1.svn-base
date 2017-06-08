@@ -1,0 +1,95 @@
+package com.mininglamp.pojo;
+
+/**
+ * @author Administrator
+ *
+ */
+public class Systemno {
+
+	private String sysno;
+	private String sysname;
+	private String syscomm;
+	private String sysversion;
+	private String sysurl;
+	private String regusername;
+	private String reguseridcard;
+	private String sysregisttime;
+	private String sysnctime;
+	private String conaddr;
+	private String rolectrl;
+	private String ownership;
+	public String getSysno() {
+		return sysno;
+	}
+	public void setSysno(String sysno) {
+		this.sysno = sysno;
+	}
+	public String getSysname() {
+		return sysname;
+	}
+	public void setSysname(String sysname) {
+		this.sysname = sysname;
+	}
+	public String getSyscomm() {
+		return syscomm;
+	}
+	public void setSyscomm(String syscomm) {
+		this.syscomm = syscomm;
+	}
+	public String getSysversion() {
+		return sysversion;
+	}
+	public void setSysversion(String sysversion) {
+		this.sysversion = sysversion;
+	}
+	public String getSysurl() {
+		return sysurl;
+	}
+	public void setSysurl(String sysurl) {
+		this.sysurl = sysurl;
+	}
+	public String getRegusername() {
+		return regusername;
+	}
+	public void setRegusername(String regusername) {
+		this.regusername = regusername;
+	}
+	public String getReguseridcard() {
+		return reguseridcard;
+	}
+	public void setReguseridcard(String reguseridcard) {
+		this.reguseridcard = reguseridcard;
+	}
+	public String getSysregisttime() {
+		return sysregisttime;
+	}
+	public void setSysregisttime(String sysregisttime) {
+		this.sysregisttime = sysregisttime;
+	}
+	public String getSysnctime() {
+		return sysnctime;
+	}
+	public void setSysnctime(String sysnctime) {
+		this.sysnctime = sysnctime;
+	}
+	public String getConaddr() {
+		return conaddr;
+	}
+	public void setConaddr(String conaddr) {
+		this.conaddr = conaddr;
+	}
+	public String getRolectrl() {
+		return rolectrl;
+	}
+	public void setRolectrl(String rolectrl) {
+		this.rolectrl = rolectrl;
+	}
+	public String getOwnership() {
+		return ownership;
+	}
+	public void setOwnership(String ownership) {
+		this.ownership = ownership;
+	}
+	
+	
+}

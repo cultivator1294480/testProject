@@ -1,0 +1,73 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.User;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.UserRoleVo;
+
+@MapperScan
+public interface IUserDao {
+	public User getUserById(int userId);
+
+	public User selectByPrimaryKey(int userId);
+
+	public Integer insert(User user);
+
+	/**
+	 * 更新用户信息
+	 * @param user
+	 */
+	public void updateUser(User user);
+
+	/**
+	 * 删除用户
+	 * @param userId
+	 */
+	public void delete(Integer userId);
+	/**
+	 * 查询用户总条数
+	 * @return
+	 */
+	public Integer findTotalCount(PageSupport pageSupport);
+
+	/**
+	 * 分页查询用户信息
+	 * @param pageSupport
+	 * @return
+	 */
+	public List<User> findPageUsers(PageSupport pageSupport);
+
+
+	public User findUser(Integer userId);
+	
+	
+
+	/**
+	 * 查询用户角色信息
+	 * @param sysNo
+	 * @param userId
+	 * @return
+	 */
+	public List<UserRoleVo> findUserRoleVos(@Param("sysNo") String sysNo,@Param("userId") Integer userId);
+
+	/**
+	 * 给用户添加角色
+	 * @param userId
+	 * @param sysNo
+	 * @param parseInt
+	 */
+	public void addUserRole(@Param("userId")  Integer userId,@Param("sysNo")  String sysNo,@Param("intRoleIds")  List<Integer> intRoleIds);
+
+	/**
+	 * 删除用户在指定系统的角色
+	 * @param userId
+	 * @param sysNo
+	 */
+	public void deleteUserRole(@Param("userId") Integer userId, @Param("sysNo") String sysNo);
+
+
+}

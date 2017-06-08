@@ -1,0 +1,39 @@
+package com.mininglamp.service.impl;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.dao.ExcelUtilDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.service.IExcelUtilService;
+import com.mininglamp.util.ExcelUtil;
+
+@Service("excelUtilService")
+public class ExcelUtilServiceImp  implements IExcelUtilService{
+	@Resource
+	private ExcelUtilDao excelUtilDao;
+
+	/**
+	 * 批量添加部门信息
+	 */
+	@Override
+	public Result saveExcel(MultipartFile excelFile) {
+		String tableName =  ExcelUtil.getTableName(excelFile);
+		ArrayList<ArrayList<String>> list = ExcelUtil.readExcel(excelFile);
+		for (int i = 2; i < list.size(); i++) {
+			Map<String, Object> columnValues = new HashMap<String, Object>();
+			columnValues.put("columns", list.get(0));
+			columnValues.put("values", list.get(i));
+			columnValues.put("tableName", tableName);
+			excelUtilDao.saveExcel(columnValues);
+		}
+		return Result.SUCCESS;
+	}
+
+}

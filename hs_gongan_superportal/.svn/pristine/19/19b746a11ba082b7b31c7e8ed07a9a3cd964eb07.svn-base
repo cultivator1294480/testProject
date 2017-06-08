@@ -1,0 +1,61 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.Privilege;
+import com.mininglamp.pojo.SystemInfo;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.util.PageSupport;
+
+@MapperScan
+public interface IPrivilegeDao{
+
+
+	/**
+	 *分页查询权限信息
+	 * @param pageSupport
+	 * @return
+	 */
+	public List<Privilege> findPagePrivileges(PageSupport pageSupport);
+	/**
+	 * 查询总条数
+	 * @return
+	 */
+	public Integer findTotalCount(PageSupport pageSupport);
+	
+	/**
+	 * 查询所朋系统信息
+	 * @return
+	 */
+	public List<SystemInfo> findSystems();
+	
+	
+	/**
+	 * 添加用户信息
+	 * @param privilege
+	 */
+	public void addPrivilege(Privilege privilege);
+	
+	/**
+	 * 查询权限信息
+	 * @param privilegeId
+	 * @return
+	 */
+	public Privilege findPrivilegeDialog(Integer privilegeId);
+	/**
+	 * 更新权限信息
+	 * @param privilege
+	 */
+	public void updatePrivilege(Privilege privilege);
+	/**
+	 * 删除权限信息
+	 * @param privId
+	 */
+	public void deletePrivilege(Integer privId);
+	public List<Systemno> getSystemmo();
+
+
+	
+}

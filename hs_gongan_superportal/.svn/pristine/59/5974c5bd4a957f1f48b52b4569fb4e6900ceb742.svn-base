@@ -1,0 +1,18 @@
+package com.mininglamp.service;
+
+import java.util.Map;
+
+
+public interface ICodeService {
+
+	/**
+	 * 获得所有code表内容
+	 * @return
+	 */
+	Map<String, Map<String, String>> getCode();
+
+
+
+
+
+}

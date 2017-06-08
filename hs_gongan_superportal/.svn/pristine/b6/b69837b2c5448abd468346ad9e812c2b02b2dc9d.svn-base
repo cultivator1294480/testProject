@@ -1,0 +1,71 @@
+package com.mininglamp.service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.User;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.UserRoleVo;
+public interface IUserService {
+	public User getUserById(int userId);
+
+
+	/**
+	 * 更新用户信息
+	 * @param user
+	 * @return
+	 */
+	public Result updateUser(HttpServletRequest request);
+
+	/**
+	 * 删除用户
+	 * @param userId
+	 * @return
+	 */
+	public Result deleteUser(Integer userId);
+
+
+	/**
+	 * 分页查询用户信息
+	 * @param startNum
+	 * @return
+	 */
+	public PageSupport findPageUsers(PageSupport pageSupport);
+
+	public Result addUser(HttpServletRequest request);
+
+
+	/**
+	 * 查询 用户信息
+	 * @param userId
+	 * @return
+	 */
+	public User findUser(Integer userId);
+
+
+	/**
+	 * 查询用户角色信息
+	 * @param request
+	 * @return
+	 */
+	public List<UserRoleVo> findUserRoleVos(HttpServletRequest request);
+
+
+	/**
+	 * 提交用户角色信息
+	 */
+	public Result submitUserRole(HttpServletRequest request);
+
+
+	/**
+	 * 批量添加用户信息
+	 * @param excelFile
+	 */
+	public Result addUsers(MultipartFile excelFile);
+
+
+}

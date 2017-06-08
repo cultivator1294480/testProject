@@ -1,0 +1,184 @@
+package com.mininglamp.controller;
+
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Role;
+import com.mininglamp.pojo.SystemInfo;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.IExcelUtilService;
+import com.mininglamp.service.IPrivilegeService;
+import com.mininglamp.service.IRoleService;
+import com.mininglamp.util.CachFactory;
+import com.mininglamp.util.Constants;
+import com.mininglamp.util.DateUtilPer;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.RolePrivilegeVo;
+/**
+ * 角色权限 
+ * @author 程城cheng
+ *
+ */
+@Controller
+@RequestMapping("/role")
+public class RoleController {
+	@Resource
+	private IRoleService roleService;
+	
+	@Resource
+	private IPrivilegeService privilegeService;
+	
+	@Resource
+	private IExcelUtilService excelUtilService;
+	/**
+	 * 跳轉到角色信息
+	 */
+	@RequestMapping("/showRole")
+	public String showRole(PageSupport pageSupport,Model model) {
+		pageSupport = roleService.findPageRoles(pageSupport);
+		model.addAttribute("pageSupport", pageSupport);
+		model.addAttribute("systems", (Map<String, Object>) CachFactory.getInstance().getMapByKey(Constants.DICT).get(Constants.TB_SYS_SYSTEM));
+		return "role/showRole";
+		
+	}
+	
+	/**
+	 * 根據ID添加角色信息
+	 * 
+	 * @param role
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findRoleById")
+	public Role findRoleById(HttpServletRequest request, HttpServletResponse response) {
+		Role role = new Role();
+		role.setRoleId(Integer.parseInt(request.getParameter("roleId")));
+		return roleService.findRoleById(role);
+	}
+	/**
+	 * 下拉框用数据库的信息
+	 * @param role
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/findSysNo")
+	public List<SystemInfo> findSysNo(HttpServletRequest request, HttpServletResponse response) {	
+		return privilegeService.findSystems();
+	}
+	/**
+	 * 添加角色信息
+	 * @param role
+	 */
+	@ResponseBody  
+	@RequestMapping(value = "/addRole")
+	public Result addRole(HttpServletRequest request, HttpServletResponse response){
+		Role role = new Role();
+		role.setRoleName(request.getParameter("roleName"));
+		role.setRoleComm(request.getParameter("roleComm"));
+		role.setSysNo(request.getParameter("sysNo"));
+		role.setCreateTime(DateUtilPer.getNowString());
+		UserLogin userInfo = (UserLogin) request.getSession().getAttribute("user");
+		role.setCreateUser(userInfo.getLoginid());
+		role.setCreateUseridCard(userInfo.getSfzh());
+//		role.setCreateTime(request.getParameter("createTime"));
+//		role.setCreateUser(request.getParameter("createUser"));
+//		role.setCreateUseridCard(request.getParameter("createUseridCard"));
+//		role.setRoleId(Integer.parseInt(request.getParameter("roleId")));
+		return roleService.addRole(role);
+	}
+	
+	/**
+	 * 更新角色信息
+	 * 
+	 * @param role
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/updateRole")
+	public Result updateRole(HttpServletRequest request, HttpServletResponse response){
+		Role role=new Role();
+		role.setRoleId(Integer.parseInt(request.getParameter("roleId")));
+		role.setRoleName(request.getParameter("roleName"));
+		role.setRoleComm(request.getParameter("roleComm"));
+		role.setSysNo(request.getParameter("sysNo"));
+//		role.setCreateTime(request.getParameter("createTime"));
+//		role.setCreateUser(request.getParameter("createUser"));
+//		role.setCreateUseridCard(request.getParameter("createUseridCard"));
+		return roleService.updateRole(role);
+	}
+	/**
+	 * 删除角色
+	 * 
+	 * @param role
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/deleteRole")
+	public Result deleteRole(HttpServletRequest request) {
+		Role role=new Role();
+		role.setRoleId(Integer.parseInt(request.getParameter("roleId")));
+		return roleService.deleteRole(role);
+	}
+
+
+	/**
+	 * 批量导入部门信息
+	 * 
+	 * @param depts
+	 * @return
+	 */
+	@RequestMapping("/addRoles")
+	public String addRoles(@RequestParam("excelFile") MultipartFile excelFile,HttpServletRequest request) {
+		roleService.addRoles(excelFile,request);
+		return "redirect:showRole";
+	}
+	
+	
+	
+	
+	
+	/**
+	 *查询用户角色信息
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping("/rolePrivilege")
+	public String rolePrivilege(HttpServletRequest request,Model model){
+		List<RolePrivilegeVo> rolePrivilegeVos = roleService.findRolePrivilegeVo(request);
+		model.addAttribute("rolePrivilegeVos", rolePrivilegeVos);
+		model.addAttribute("roleId", Integer.parseInt(request.getParameter("roleId")));
+		return "role/rolePrivilege";
+	}
+	
+	
+
+	/**
+	 * 提交角色的权限信息
+	 * @param request
+	 * @param model
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/submitRolePrivilegeVo")
+	public Result submitRolePrivilegeVo(HttpServletRequest request){
+		Result result  = roleService.submitRolePrivilegeVo(request);
+		return result;
+	}
+	
+	
+	
+		
+}

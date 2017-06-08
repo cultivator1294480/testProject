@@ -1,0 +1,39 @@
+package com.mininglamp.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateUtilPer {
+
+	/**
+	 * 日期格式化
+	 * @param dateString
+	 * @return
+	 */
+	public static String dateFormate(String dateString) {
+		if(null!=dateString&&!"".equals(dateString)&&dateString.length()==8){
+			StringBuilder  sb = new StringBuilder (dateString);  
+			sb.insert(4, "/");  
+			sb.insert(7, "/");  
+			return sb.toString(); 
+		}
+		return ""; 
+	}	
+	
+	// 获得现在的时间
+	public static String getNowString() {
+		Date currentTime = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
+	
+	// 获得现在的时间
+	public static String getNowStringSplitByOblique() {
+		Date currentTime = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		String dateString = formatter.format(currentTime);
+		return dateString;
+	}
+
+}

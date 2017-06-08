@@ -1,0 +1,13 @@
+
+USE `hs_gongan`;
+
+#
+# Table structure for table country
+#
+
+DROP TABLE IF EXISTS `t_user`;
+CREATE TABLE `t_user` (               
+          `id` int(11) DEFAULT NULL,          
+          `name` varchar(10) DEFAULT NULL,    
+          `age` int(11) DEFAULT NULL          
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 

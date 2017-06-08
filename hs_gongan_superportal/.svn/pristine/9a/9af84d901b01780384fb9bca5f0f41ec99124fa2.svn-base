@@ -1,0 +1,148 @@
+package com.mininglamp.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
+import com.mininglamp.dao.IDpetDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Dept;
+import com.mininglamp.pojo.WorkUnit;
+import com.mininglamp.service.IDeptService;
+import com.mininglamp.util.PageSupport;
+
+@Service("deptService")
+public class DeptServiceImp  implements IDeptService{
+	@Resource
+	private IDpetDao dpetDao;
+	
+
+	/**
+	 * 添加部门信息
+	 */
+	@Override
+	public Result addWorkUnit(HttpServletRequest request) {
+		WorkUnit workUnit = new WorkUnit();
+		setAddWorkUnit(request,workUnit);
+		dpetDao.saveWorkUnit(workUnit);
+		return Result.SUCCESS;
+	}
+
+	private void setAddWorkUnit(HttpServletRequest request, WorkUnit workUnit) {
+		workUnit.setCode(request.getParameter("code"));
+		workUnit.setName(request.getParameter("name"));
+		workUnit.setRemark(request.getParameter("remark"));
+		workUnit.setVersion(request.getParameter("version"));
+	}
+
+	private void setUpdateWorkUnit(HttpServletRequest request, WorkUnit workUnit) {
+		workUnit.setId(Integer.parseInt(request.getParameter("id")));
+		workUnit.setCode(request.getParameter("code"));
+		workUnit.setName(request.getParameter("name"));
+		workUnit.setRemark(request.getParameter("remark"));
+		workUnit.setVersion(request.getParameter("version"));
+	}
+
+
+
+	/**
+	 * 更新部门信息
+	 */
+	@Override
+	public Result updateDept(Dept dept) {
+		//保存部门信息
+		dpetDao.updateDept(dept);
+		return Result.SUCCESS;
+	}
+
+
+
+
+
+
+
+
+
+	@Override
+	public PageSupport findPageDepts(int pageNo,String code,String deptName) {
+		PageSupport pageSupport = new PageSupport();
+//		pageSupport.setPageSize(10);
+//		pageSupport.setCountShowPage(10);
+//		pageSupport.setPage(pageNo);
+//		pageSupport.setNum((pageNo-1)*pageSupport.getPageSize());
+//		pageSupport.setItems(dpetDao.findPageWorkUnits(pageSupport,code,deptName));
+//		pageSupport.setTotalCount(dpetDao.findTotalCount(code,deptName));
+//		pageSupport.setTotalPageCount();
+//		pageSupport.setPageNos();
+		return pageSupport;
+	}
+
+
+
+
+	@Override
+	public WorkUnit findWorkUnit(WorkUnit workUnit) {
+		return dpetDao.findWorkUnit(workUnit);
+	}
+
+
+
+	@Override
+	public Result updateWorkUnit(HttpServletRequest request) {
+		WorkUnit workUnit = new WorkUnit();
+		setUpdateWorkUnit(request,workUnit);
+		dpetDao.updateWorkUnit(workUnit);
+		return Result.SUCCESS;
+	}
+
+
+
+	@Override
+	public Result deleteWorkUnit(WorkUnit workUnit) {
+		dpetDao.deleteWorkUnit(workUnit);
+		return Result.SUCCESS;
+	}
+
+	@Override
+	public PageSupport findPageDepts(PageSupport pageSupport) {
+		
+		decode(pageSupport);
+
+		pageSupport.formateIn();
+		
+		pageSupport.setItems(dpetDao.findPageWorkUnits(pageSupport));
+		pageSupport.setTotalCount(dpetDao.findTotalCount(pageSupport));
+		
+		pageSupport.formateOut();
+		return pageSupport;
+	}
+
+	private void decode(PageSupport pageSupport) {
+		try {
+			if(null!=pageSupport.getSearch()&&null != pageSupport.getSearch().get("deptName")){
+				pageSupport.getSearch().put("deptName", URLDecoder.decode(pageSupport.getSearch().get("deptName"), "UTF-8") );
+			}
+			
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+
+
+
+
+
+
+
+	
+
+
+}

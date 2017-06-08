@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.IRoleDao">
+
+
+	<!-- 插入一条角色信息 -->
+	<insert id="addRole" parameterType="com.mininglamp.pojo.Role"
+		useGeneratedKeys="true" keyProperty="ROLEID">
+	INSERT INTO tb_sys_role
+	(
+	ROLEID,
+	ROLENAME,
+	ROLECOMM,
+	SYSNO,
+	CREATETIME,
+	CREATEUSER,
+	CREATEUSERIDCARD
+	)
+	VALUES
+	(
+	#{roleId},
+	#{roleName},
+	#{roleComm},
+	#{sysNo},
+	#{createTime},
+	#{createUser},
+	#{createUseridCard }
+	);
+	</insert>
+	<select id="findTotalCount" resultType="int">
+
+	select count(8) from (
+		select 
+		tb_sys_role.sysno
+		from tb_sys_role , tb_sys_system 
+		 where 1=1 and tb_sys_role.sysno=tb_sys_system.sysno 
+		 
+		 <if test=" null !=  search  and null !=  search.roleName and '' !=  search.roleName">
+    		and tb_sys_role.ROLENAME LIKE CONCAT('%',#{search.roleName},'%')
+    	</if>
+    	<if test=" null !=  search  and null !=  search.sysNo and '' !=  search.sysNo">
+    		and tb_sys_role.SYSNO LIKE CONCAT('%',#{search.sysNo},'%')
+    	</if>
+	) as countAlias
+		
+			
+	</select>
+	<!-- 查询 -->
+	<resultMap id="role" type="com.mininglamp.pojo.Role">
+		<id column="ROLEID" property="roleId"></id>
+		<result column="ROLENAME" property="roleName"></result>
+		<result column="ROLECOMM" property="roleComm"></result>
+		<result column="SYSNO" property="sysNo"></result>
+		<result column="CREATETIME" property="createTime"></result>
+		<result column="CREATEUSER" property="createUser"></result>
+		<result column="CREATEUSERIDCARD" property="createUseridCard"></result>
+	</resultMap>
+	
+	<select id="findPageRoles" resultMap="role"
+		parameterType="com.mininglamp.util.PageSupport">
+		select DISTINCT
+		*
+		from tb_sys_role , tb_sys_system 
+		 where 1=1 
+		 and tb_sys_role.sysno=tb_sys_system.sysno 
+		 <if test=" null !=  search  and null !=  search.sysNo and search.sysNo !=''">
+    		and tb_sys_role.SYSNO = #{search.sysNo}
+    	</if>
+		 <if test=" null !=  search  and null !=  search.roleName and search.roleName !=''">
+    		and tb_sys_role.ROLENAME LIKE CONCAT('%',#{search.roleName},'%')
+    	</if>
+		 order by tb_sys_role.roleid desc
+		limit #{startLine},#{pageSize}
+	</select>
+	
+	
+<!-- 根据 roleid查的角色信息-->
+	<select id="findRoleById" resultMap="role" parameterType="int">
+		select
+		roleid,
+		rolename,
+		rolecomm,
+		sysno,
+		createtime,
+		createuser,
+		createuseridcard
+		from tb_sys_role
+		where roleid =#{roleId} 
+	</select>
+	<!-- 查询sysno内容-->
+	<select id="findSysNo" resultMap="role" parameterType="int">
+		select
+		sysno,
+		SYSNAME 
+		from tb_sys_system
+	</select>
+	<!-- 查询部门信息 总条数 -->
+	<select id="countRoles" resultType="java.util.List">
+		select count(*) from tb_sys_role
+	</select>
+
+	<!-- 查询角色信息 总条数 -->
+	<select id="findCountRole" resultType="int" parameterType="com.mininglamp.pojo.Role">
+		SELECT COUNT(*) FROM tb_sys_role WHERE roleid = #{roleId}
+	</select>
+
+	<!-- 插入一条部门信息 -->
+	<insert id="saveRole" parameterType="com.mininglamp.pojo.Role"
+		useGeneratedKeys="true" keyProperty="roleid">
+		INSERT INTO tb_sys_role
+		(
+		rolename,
+		rolecomm,
+		sysno,
+		createtime,
+		createuser,
+		createuseridcard
+		)
+		VALUES
+		(
+		#{roleName},
+		#{roleComm},
+		#{sysNo},
+		#{createTime},
+		#{createUser},
+		#{createUseridCard}
+		);
+	</insert>
+	<!-- 查询其他有相同名字的部门信息 -->
+	<select id="findOtherCountRole" resultType="int"
+		parameterType="com.mininglamp.pojo.Role">
+		SELECT COUNT(*) FROM tb_sys_role WHERE rolename =
+		#{roleName} and roleid != #{roleId}
+	</select>
+	<!-- 更新角色信息 -->
+	<update id="updateRole" parameterType="com.mininglamp.pojo.Role">
+		update tb_sys_role
+		<set>
+			<if test="roleName!=null">ROLENAME=#{roleName},</if>
+			<if test="roleComm!=null">ROLECOMM=#{roleComm},</if>
+			<if test="sysNo!=null">SYSNO=#{sysNo},</if>
+		</set>
+		WHERE ROLEID = #{roleId}
+	</update>
+
+
+
+	<!-- 删除部门信息 -->
+	<delete id="deleteRole" parameterType="com.mininglamp.pojo.Role">
+		delete from tb_sys_role where ROLEID = #{roleId}
+	</delete>
+	
+	
+	
+	    
+     <resultMap id="rolePrivilegeVo" type="com.mininglamp.vo.RolePrivilegeVo">
+     	<result column="SYSNO" property="sysNo"></result>
+		<result column="ROLEID" property="roleId"></result>
+		<result column="PRIVID" property="privId"></result>
+		<result column="PRIVNAME" property="privName"></result>
+		<result column="PRIVCOMM" property="privComm"></result>
+     </resultMap>
+	<!--角色权限信息 -->
+	<select id="findRolePrivilegeVo" resultMap="rolePrivilegeVo">
+	SELECT DISTINCT
+	tb_sys_privilege.PRIVID,
+	tb_sys_privilege.PRIVNAME,
+	tb_sys_privilege.PRIVCOMM,
+	tb_sys_privilege.SYSNO,
+	tb_sys_map_role_priv_used.ROLEID
+	FROM
+	tb_sys_privilege
+	LEFT JOIN (
+<!-- 角色对应 的map表-->
+	SELECT
+	*
+	FROM
+	tb_sys_map_role_priv
+	WHERE
+	tb_sys_map_role_priv.ROLEID = #{roleId}
+	) tb_sys_map_role_priv_used ON tb_sys_privilege.PRIVID =tb_sys_map_role_priv_used.PRIVID,
+	tb_sys_role
+	WHERE
+<!-- 	角色所有系统内的权限信息-->
+	tb_sys_role.ROLEID = #{roleId}
+	AND tb_sys_role.SYSNO = tb_sys_privilege.SYSNO
+	</select>
+
+
+	<!--  删除角色在指定系统的角色-->
+	<delete id="deleteRolePrivileg">
+		DELETE FROM tb_sys_map_role_priv
+		WHERE ROLEID=#{roleId} AND SYSNO=#{sysNo}
+	</delete>
+	
+	
+	<insert id="addRolePrivilege" >
+		INSERT INTO tb_sys_map_role_priv
+		(
+			SYSNO,
+			ROLEID,
+			PRIVID
+		)
+		VALUES
+		(
+			#{sysNo},
+			#{roleId},
+			#{privId}
+		);
+	</insert>
+</mapper>

@@ -1,0 +1,68 @@
+package com.mininglamp.service.impl;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
+import com.mininglamp.dao.SystemDao;
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.service.ISystemsService;
+import com.mininglamp.util.DateUtilPer;
+import com.mininglamp.util.PageSupport;
+@Service("/systemService")
+public class SystemsImpl implements ISystemsService {
+	@Resource
+	private SystemDao systemDao;
+
+	public Result registSystem(Systemno system, HttpServletRequest request){
+		UserLogin user= (UserLogin) request.getSession().getAttribute("user");
+		system.setRegusername(user.getLoginid());
+		system.setReguseridcard(user.getSfzh());
+		system.setSysregisttime(DateUtilPer.getNowStringSplitByOblique());
+		system.setSysnctime(DateUtilPer.getNowStringSplitByOblique());
+		 systemDao.registSystem(system);
+		 return Result.SUCCESS;
+	}
+
+	
+	public PageSupport getAllsystem(PageSupport pageSupport) {
+		decode(pageSupport);
+		pageSupport.formateIn();
+		pageSupport.setItems(systemDao.getSystem(pageSupport));
+		pageSupport.setTotalCount(systemDao.findTotalCount(pageSupport));
+		pageSupport.formateOut();
+		return pageSupport;
+	}
+
+	
+	private void decode(PageSupport pageSupport) {
+		try {
+			if(null!=pageSupport.getSearch()&&null != pageSupport.getSearch().get("sysname")){
+				pageSupport.getSearch().put("sysname", URLDecoder.decode(pageSupport.getSearch().get("sysname"), "UTF-8") );
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	public Result getUpdateSystem(Systemno sys) {
+		sys.setSysnctime(DateUtilPer.getNowStringSplitByOblique());
+		systemDao.updateSystem(sys);
+		return Result.SUCCESS;
+	}
+
+	public Systemno getfindSysById(Systemno sys) {
+		return systemDao.getfindSysById(sys);
+	}
+
+	public Result deleteSystem(Systemno sys) {
+		systemDao.getDeleteSystem(sys);
+		return Result.SUCCESS;
+	}
+	
+}

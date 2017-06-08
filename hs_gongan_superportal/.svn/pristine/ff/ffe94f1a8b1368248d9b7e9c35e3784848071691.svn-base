@@ -1,0 +1,28 @@
+package com.mininglamp.dao;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import org.mybatis.spring.annotation.MapperScan;
+
+import com.mininglamp.pojo.DeskTopApp;
+import com.mininglamp.pojo.Desktopyy;
+import com.mininglamp.pojo.UserLogin;
+import com.mininglamp.pojo.DeskJson;
+
+@MapperScan
+public interface ILoginDao {
+	
+	public UserLogin getLogin(@Param("loginid")String loginid,@Param("password") String password);
+
+	public DeskJson getUserId(@Param("userid")int userid);
+
+	public DeskTopApp getApp(int userid);
+
+	public Desktopyy getDesktopyy(int userid);
+	/**
+	 * 查询用户的权限
+	 * @return
+	 */
+	public List<String> getPrivById(@Param("loginid") String loginid);
+}

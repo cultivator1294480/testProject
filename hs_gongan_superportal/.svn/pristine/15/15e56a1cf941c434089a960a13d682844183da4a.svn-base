@@ -1,0 +1,36 @@
+package com.mininglamp.controller;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@Controller
+public class IndexController {
+	@RequestMapping("/main")
+	public String main(HttpServletRequest request,Model model){  
+        return "template/main";  
+	}
+	@RequestMapping("/top")
+	public String top(HttpServletRequest request,Model model){  
+        return "template/top";  
+	}
+	@RequestMapping("/center")
+	public String center(HttpServletRequest request,Model model){  
+        return "template/center";  
+	}
+	@RequestMapping("/left")
+	public String left(HttpServletRequest request,Model model){  
+        return "template/left";  
+	}
+	@RequestMapping("/right")
+	public String right(HttpServletRequest request,Model model){  
+        return "template/right";  
+	}
+	@RequestMapping("/down")
+	public String down(HttpServletRequest request,Model model){  
+        return "template/down";  
+	}
+}

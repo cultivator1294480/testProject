@@ -1,0 +1,66 @@
+package com.mininglamp.service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Role;
+import com.mininglamp.util.PageSupport;
+import com.mininglamp.vo.RolePrivilegeVo;
+
+public interface IRoleService {
+	
+	/**
+	 * 
+	 * @param 新增角色信息
+	 * @return
+	 */
+	public Result addRole(Role role);
+	
+	/**
+	 * 分页查询角色信息
+	 * @param startNum
+	 * @return
+	 */
+	public PageSupport findPageRoles(PageSupport pageSupport);
+	
+	/**
+	 * 更新角色信息
+	 * @param role
+	 * @return
+	 */
+	public Result updateRole(Role role);
+
+	/**
+	 * 删除角色
+	 * @param role
+	 * @return
+	 */
+	public Result deleteRole(Role role);
+	
+	/**
+	 * 根据rolename查找部门信息
+	 * @param role
+	 * @return
+	 */
+	public Role findRoleById(Role role);
+
+	/**
+	 * 查询角色在所在系统内的权限信息
+	 * @param request
+	 * @return
+	 */
+	public List<RolePrivilegeVo> findRolePrivilegeVo(HttpServletRequest request);
+
+	/**
+	 * 保存角色的仅限信息
+	 * @return
+	 */
+	public Result submitRolePrivilegeVo(HttpServletRequest request);
+
+	public void addRoles(MultipartFile excelFile, HttpServletRequest request);
+
+}

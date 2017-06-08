@@ -1,0 +1,18 @@
+package com.mininglamp.service;
+
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.mininglamp.model.Result;
+import com.mininglamp.pojo.Systemno;
+import com.mininglamp.util.PageSupport;
+
+public interface ISystemsService {
+
+	public Result registSystem(Systemno system, HttpServletRequest request);
+//	public String registSystem(Systemno ssys);
+	public PageSupport getAllsystem(PageSupport pageSupport);
+	public Result getUpdateSystem(Systemno system);
+	public Systemno getfindSysById(Systemno system);
+	public Result deleteSystem(Systemno sys);
+}

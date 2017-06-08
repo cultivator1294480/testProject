@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mininglamp.dao.SystemDao">
+    
+    <insert id="registSystem" parameterType="com.mininglamp.pojo.Systemno">
+		insert into tb_sys_system 
+		set 
+		SYSNO=#{sysno},
+		SYSNAME=#{sysname},
+		SYSCOMM=#{syscomm},
+		SYSVERSION=#{sysversion},
+		SYSURL=#{sysurl},
+		REGUSERNAME=#{regusername},
+		REGUSERIDCARD=#{reguseridcard},
+		SYSREGISTTIME=#{sysregisttime},
+		SYSNCTIME=#{sysnctime},
+		CONADDR=#{conaddr},
+		ROLECTRL=#{rolectrl},
+		OWNERSHIP=#{ownership}
+	</insert>
+	
+	
+	 <select id="getSystem" resultType="com.mininglamp.pojo.Systemno"  parameterType="com.mininglamp.util.PageSupport">
+    	select * from  tb_sys_system where 1=1 
+    	<if test=" null !=  search  and null !=  search.sysno  and '' !=  search.sysno">
+    		and SYSNO LIKE CONCAT('%',#{search.sysno},'%')
+    	</if>
+     	<if test=" null !=  search  and null !=  search.sysname  and '' !=  search.sysname">
+    		and SYSNAME LIKE CONCAT('%',#{search.sysname},'%')
+    	</if>
+		limit #{startLine},#{pageSize}
+     </select>
+     
+     <select id="findTotalCount" resultType="int" parameterType="com.mininglamp.util.PageSupport">
+		select count(8) from(
+			select * from  tb_sys_system where 1=1 
+	    	<if test=" null !=  search  and null !=  search.sysno  and '' !=  search.sysno">
+	    		and SYSNO = #{search.sysno}
+	    	</if>
+	     	<if test=" null !=  search  and null !=  search.sysname  and '' !=  search.sysname">
+	    		and SYSNAME LIKE CONCAT('%',#{search.sysname},'%')
+	    	</if>
+		) as countAlias
+	 </select>
+   
+   <update id="updateSystem" parameterType="com.mininglamp.pojo.Systemno" >
+   		update tb_sys_system set SYSNO=#{sysno},
+	   		SYSNAME=#{sysname},
+	   		SYSCOMM=#{syscomm},
+	   		SYSVERSION=#{sysversion},
+	   		SYSURL=#{sysurl},
+			SYSNCTIME=#{sysnctime},
+			CONADDR=#{conaddr},
+			ROLECTRL=#{rolectrl},
+			OWNERSHIP=#{ownership} 
+		where SYSNO=#{sysno}
+   </update>
+   <select id="getfindSysById" resultType="com.mininglamp.pojo.Systemno" parameterType="String">
+   		select * from tb_sys_system where SYSNO=#{sysno}
+   </select>
+   
+    <select id="getAllsystems" resultType="com.mininglamp.pojo.Systemno">
+    		SELECT DISTINCT
+			tb_sys_system.*
+			FROM
+			tb_sys_map_user_role,tb_sys_role,tb_sys_map_role_priv,tb_sys_privilege,tb_sys_system
+			<!-- 用户的角色 -->
+			WHERE tb_sys_map_user_role.ROLEID = tb_sys_role.ROLEID
+			<!-- 角色的权限 -->
+			AND tb_sys_map_role_priv.ROLEID = tb_sys_role.ROLEID
+			AND
+			tb_sys_privilege.PRIVID = tb_sys_map_role_priv.PRIVID
+			<!-- 权限的系统 -->
+			AND tb_sys_system.SYSNO = tb_sys_privilege.privname
+			AND tb_sys_map_user_role.USERID=#{userId}
+     </select>
+     
+     
+     <delete id="getDeleteSystem" parameterType="com.mininglamp.pojo.Systemno">
+		delete from tb_sys_system where SYSNO=#{sysno}
+	</delete>
+     
+</mapper>

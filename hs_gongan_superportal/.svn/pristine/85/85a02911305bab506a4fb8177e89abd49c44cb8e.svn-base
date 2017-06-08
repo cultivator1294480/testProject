@@ -1,0 +1,97 @@
+package com.mininglamp.pojo;
+
+import com.mininglamp.util.DateUtilPer;
+
+public class Privilege {
+	
+	// 权限ID varchar 20
+	private Integer privId;
+	
+	// PRIVNAME 权限名称 varchar 60
+	private String privName;
+	
+	// PRIVCOMM 权限描述 varchar 200
+	private String privComm;
+	
+	// SYSNO 系统编号 varchar 6|外键
+	private String sysNo;
+	
+	// CREATETIME 创建时间 varchar 14
+	private String createTime;
+	
+	// CREATEUSER 创建用户姓名 varchar 30
+	private String createUser;
+	
+	// CREATEUSERIDCARD 创建用户身份证号 varchar 18
+	private String createUseridCard;
+
+	public Integer getPrivId() {
+		return privId;
+	}
+
+	public void setPrivId(Integer privId) {
+		this.privId = privId;
+	}
+
+	public String getPrivName() {
+		return privName;
+	}
+
+	public void setPrivName(String privName) {
+		this.privName = privName;
+	}
+
+
+	public String getPrivComm() {
+		return privComm;
+	}
+
+	public void setPrivComm(String privComm) {
+		this.privComm = privComm;
+	}
+
+	public String getSysNo() {
+		return sysNo;
+	}
+
+	public void setSysNo(String sysNo) {
+		this.sysNo = sysNo;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getCreateUser() {
+		return createUser;
+	}
+
+	public void setCreateUser(String createUser) {
+		this.createUser = createUser;
+	}
+
+	public String getCreateUseridCard() {
+		return createUseridCard;
+	}
+
+	public void setCreateUseridCard(String createUseridCard) {
+		this.createUseridCard = createUseridCard;
+	}
+	
+	
+	/**
+	 * 返回信息格式化
+	 */
+	public void form(){
+		this.createTime = DateUtilPer.dateFormate(createTime);
+	}
+	
+	
+	
+	
+	
+}

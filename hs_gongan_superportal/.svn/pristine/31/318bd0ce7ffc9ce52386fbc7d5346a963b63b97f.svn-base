@@ -1,0 +1,126 @@
+package com.mininglamp.pojo;
+
+
+/**
+ * 系统配置信息
+ * @author 程城cheng
+ *
+ */
+public class SystemInfo {
+
+	// SYSNO 系统编号 varchar 6
+	private String sysNo;
+
+	// SYSNAME 系统名称 varchar 30
+	private String sysName;
+	
+	// SYSCOMM 系统描述 varchar 60
+	private String sysComm;
+	
+	// SYSVERSION 版本号 varchar 20
+	private String sysVersion;
+	
+	// SYSURL 系统地址 varchar 60
+	private String sysUrl;
+	
+	// REGUSERNAME 注册人姓名 varchar 30
+	private String regUsername;
+	
+	// REGUSERIDCARD 注册人身份证号 varchar 18
+	private String regUserIdCard;
+	
+	// SYSREGISTTIME 注册时间 varchar 14
+	private String sysRegistTime;
+	
+	// SYSNCTIME 权限同步时间 varchar 14
+	private String sysNcTime;
+	
+	// CONADDR 图片地址 varchar 60
+	private String conAddr;
+	
+	// ROLECTRL 是否难权限 varchar 1 | 1是 0否
+	private String roleCtrl;
+	
+	// OWNERSHIP  是否自建系 varchar 1 | 1 是 0 否
+	private String ownerShip;
+	
+	
+	
+	
+	public String getSysNo() {
+		return sysNo;
+	}
+	public void setSysNo(String sysNo) {
+		this.sysNo = sysNo;
+	}
+
+	public String getSysName() {
+		return sysName;
+	}
+	public void setSysName(String sysName) {
+		this.sysName = sysName;
+	}
+	public String getSysComm() {
+		return sysComm;
+	}
+	public void setSysComm(String sysComm) {
+		this.sysComm = sysComm;
+	}
+	public String getSysVersion() {
+		return sysVersion;
+	}
+	public void setSysVersion(String sysVersion) {
+		this.sysVersion = sysVersion;
+	}
+	public String getSysUrl() {
+		return sysUrl;
+	}
+	public void setSysUrl(String sysUrl) {
+		this.sysUrl = sysUrl;
+	}
+	public String getRegUsername() {
+		return regUsername;
+	}
+	public void setRegUsername(String regUsername) {
+		this.regUsername = regUsername;
+	}
+	public String getRegUserIdCard() {
+		return regUserIdCard;
+	}
+	public void setRegUserIdCard(String regUserIdCard) {
+		this.regUserIdCard = regUserIdCard;
+	}
+	public String getSysRegistTime() {
+		return sysRegistTime;
+	}
+	public void setSysRegistTime(String sysRegistTime) {
+		this.sysRegistTime = sysRegistTime;
+	}
+	public String getSysNcTime() {
+		return sysNcTime;
+	}
+	public void setSysNcTime(String sysNcTime) {
+		this.sysNcTime = sysNcTime;
+	}
+	public String getConAddr() {
+		return conAddr;
+	}
+	public void setConAddr(String conAddr) {
+		this.conAddr = conAddr;
+	}
+	public String getRoleCtrl() {
+		return roleCtrl;
+	}
+	public void setRoleCtrl(String roleCtrl) {
+		this.roleCtrl = roleCtrl;
+	}
+	public String getOwnerShip() {
+		return ownerShip;
+	}
+	public void setOwnerShip(String ownerShip) {
+		this.ownerShip = ownerShip;
+	}
+	
+	
+	
+}
